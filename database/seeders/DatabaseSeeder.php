@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
     {
 
         $user = User::factory()->create([
-            'name'=>'Marco',
         ]);
 
         Post::factory(5)->create([

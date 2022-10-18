@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('slug')->unique();
-            $table -> string('title');
-            $table -> string('body');
+            $table->string('title');
+            $table->string('thumbnail')->nullable();
+            $table->text('body');
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
         });
