@@ -1,5 +1,6 @@
 <x-layout>
 
+    @include ('components._header')
     <article>
         <header>
             <div class="mt-4">

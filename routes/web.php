@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -15,19 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', [PostController::class, 'index']) ->name('Homepage');
 
-    return view('posts', [
-        'posts' => Post::all()
-    ]);
-});
-Route::get('posts/{post:slug}', function (Post $post){
 
-    return view('post', [
-        'post'=> $post
-    ]);
+Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
-});
 
 Route::get('author/{author:username}', function (User $author){
     return view('posts', [
