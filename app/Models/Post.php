@@ -21,6 +21,11 @@ class Post extends Model
             ->orWhere('body', 'like', '%' . $search . '%')
         )
         );
+        $query->when($filters['author'] ?? false, fn($query, $author) =>
+        $query->whereHas('author', fn ($query) =>
+        $query->where('username', $author)
+        )
+        );
 
     }
 
