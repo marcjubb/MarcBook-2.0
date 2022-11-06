@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
         $u1 -> email = "jason@gmail.com";
         $u1 -> password = "FlyAway";
         $u1 -> save();*/
-       User::factory()-> count(10) ->create();
+       User::factory()-> count(5) ->create();
 
     }
 }

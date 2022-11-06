@@ -25,17 +25,7 @@ class DatabaseSeeder extends Seeder
         $this -> call(PostsTableSeeder::class);
 
         $this -> call(CommentsTableSeeder::class);
-        /*$user = User::factory()-> create();
 
-
-        $post = Post::factory()->create([
-            'user_id'=> $user -> id
-        ]);
-
-       Comment::factory(5)->create([
-            'user_id'=> $user -> id,
-            'post_id'=> $post -> id,
-        ]);*/
 
     }
 }

@@ -21,6 +21,6 @@ class PostsTableSeeder extends Seeder
         $u1 -> email = "jason@gmail.com";
         $u1 -> password = "FlyAway";
         $u1 -> save();*/
-        Post::factory()-> count(10) ->create();
+        Post::factory()-> count(20) ->create();
     }
 }

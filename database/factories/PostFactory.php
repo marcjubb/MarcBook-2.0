@@ -19,7 +19,7 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'=> User::factory(),
+            'user_id'=> fake()-> numberBetween(1,User::query()->get("id")->count()),
             'slug' => fake()->slug,
             'title' => fake()->sentence,
             'body' => fake()->sentence,
