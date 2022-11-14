@@ -1,14 +1,11 @@
 <?php
-
 namespace Database\Factories;
-
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\App;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
+ * @extends Factory
  */
 class CommentFactory extends Factory
 {

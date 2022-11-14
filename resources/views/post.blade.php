@@ -19,6 +19,18 @@
                 <h5 class="font-bold">{{$post -> author -> name}}</h5>
             </a>
         </div>
+
+        <h2>Comments</h2>
+
+        <section class="col-span-8 col-start-5 mt-10 space-y-6">
+            @include ('components.add_comment')
+            @foreach ($post->comments as $comment)
+                <x-post-comment :comment="$comment"/>
+            @endforeach
+        </section>
+
     </article>
+
+
 
 </x-layout>

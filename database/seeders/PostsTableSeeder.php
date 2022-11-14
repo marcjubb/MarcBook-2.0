@@ -15,12 +15,6 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
-        /*$u1 = new Post();
-        $u1 -> name = "Jason";
-        $u1 -> username = "Jason.gormo";
-        $u1 -> email = "jason@gmail.com";
-        $u1 -> password = "FlyAway";
-        $u1 -> save();*/
-        Post::factory()-> count(20) ->create();
+        Post::factory()->count(20)->create();
     }
 }

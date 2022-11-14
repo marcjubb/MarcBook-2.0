@@ -20,7 +20,7 @@ class PostController extends Controller
 
     public function index()
     {
-        return view('posts', [
+        return view('index', [
             'posts' => Post::query()->latest()->filter(
                 request(['search', 'author'])
             )->paginate(10)->withQueryString()

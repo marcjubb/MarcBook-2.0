@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegisterController;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +26,13 @@ Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
 Route::get('author/{author:username}', function (User $author){
     return view('posts', [
-        'posts'=> $author->post
+        'posts'=> $author->post,
+        'comments' => $author -> comment
     ]);
 
 });
+
+Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
+
+Route::get('register', [RegisterController::class, 'create']);
+Route::post('register', [RegisterController::class, 'store']);
