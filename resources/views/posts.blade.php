@@ -1,6 +1,19 @@
 
 <x-layout>
     @include ('components._header')
+
+    <p class="pt-4">
+        Categories:
+        @foreach ($posts as $post)
+        @foreach($post -> categories as $category)
+            <a href="/category/{{$category -> slug}}">
+                {{$category -> title}}
+            </a>
+        @endforeach
+        @endforeach
+    </p>
+
+
     <h1>Posts</h1>
         <main class="max-w-6xl mx-auto mt-6 lg:mt-20 space-y-6">
         @if ($posts -> count())

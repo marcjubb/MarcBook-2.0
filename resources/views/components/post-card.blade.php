@@ -14,8 +14,7 @@
     </div>
 
     <div class="ml-3">
-        <a href="/author/{{$post -> author -> username}}">
-        <h5 class="font-bold">{{$post -> author -> name}}</h5>
-        </a>
+        <a href="/author/{{ $post->author->username }}">
+            {{ $post->author->name }}</a>
     </div>
 </article>

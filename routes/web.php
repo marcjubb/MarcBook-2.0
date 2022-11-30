@@ -26,8 +26,8 @@ Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
 Route::get('author/{author:username}', function (User $author){
     return view('posts', [
-        'posts'=> $author->post,
-        'comments' => $author -> comment
+        'posts'=> $author -> posts,
+        'comments' => $author -> comments
     ]);
 
 });
