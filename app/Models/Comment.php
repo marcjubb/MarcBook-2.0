@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Comment extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['user_id','body','post_id'];
 
     public function author(): BelongsTo
     {
@@ -18,6 +18,6 @@ class Comment extends Model
 
     public function post(): BelongsTo
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class,'post_id');
     }
 }

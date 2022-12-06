@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -17,12 +16,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', [PostController::class, 'index']) ->name('Homepage');
-
+Route::get('/home', [PostController::class, 'index']) ->name('Homepage');
 
 Route::get('posts/{post:slug}', [PostController::class, 'show']);
-
+Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
 
 Route::get('author/{author:username}', function (User $author){
     return view('posts', [
@@ -32,7 +30,14 @@ Route::get('author/{author:username}', function (User $author){
 
 });
 
-Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
 
-Route::get('register', [RegisterController::class, 'create']);
-Route::post('register', [RegisterController::class, 'store']);
+
+Route::get('/register', [RegisterController::class, 'create']);
+Route::post('/register', [RegisterController::class, 'store']);
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+require __DIR__.'/auth.php';
