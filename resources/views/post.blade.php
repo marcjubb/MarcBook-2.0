@@ -26,7 +26,12 @@
             @include ('components.add_comment')
             @foreach ($post->comments as $comment)
                 <x-post-comment :comment="$comment"/>
+
+                <button>
+                    <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
+                </button>
             @endforeach
+
         </section>
 
     </article>

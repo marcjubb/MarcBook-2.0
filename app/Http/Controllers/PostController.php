@@ -26,7 +26,6 @@ class PostController extends Controller
             )->paginate(10)->withQueryString()
         ]);
     }
-
-
+    
 }
 

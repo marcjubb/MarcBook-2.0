@@ -22,9 +22,12 @@
 
             <x-post-card
                 :post="$post"
-                class="{{ $loop -> iteration < 3 ? 'col-span-3' : 'col-span-2'}}"/>
+                class="{{'col-span-3'}}"/>
 
-        @endforeach
+                        <a class="btn btn-primary" href="{{route('user.post.edit', $post->id)}}">Edit</a>
+
+
+                @endforeach
         @else
             <p class="text-center">No posts yet</p>
         @endif
@@ -36,7 +39,9 @@
                     <h3>Commented on {{$comment -> post -> title}}</h3>
                     <x-comment-card
                         :comment="$comment"/>
-
+                    <button>
+                        <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
+                    </button>
                 @endforeach
             @else
                 <p class="text-center">No comments yet</p>

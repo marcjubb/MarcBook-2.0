@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [PostController::class, 'index']) ->name('Homepage');
-Route::get('/home', [PostController::class, 'index']) ->name('Homepage');
 
-Route::get('posts/{post:slug}', [PostController::class, 'show']);
-Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
-
-Route::get('author/{author:username}', function (User $author){
+//Webpage Browsing routes
+Route::get('/', [PostController::class, 'index']) ->name('home');
+Route::get('/home', [PostController::class, 'index']) ->name('homer');
+Route::get('/posts/{post:slug}', [PostController::class, 'show']);
+Route::post('/posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
+Route::get('/author/{author:username}', function (User $author){
     return view('posts', [
         'posts'=> $author -> posts,
         'comments' => $author -> comments
@@ -31,10 +31,28 @@ Route::get('author/{author:username}', function (User $author){
 });
 
 
-
+//Register Routes
 Route::get('/register', [RegisterController::class, 'create']);
 Route::post('/register', [RegisterController::class, 'store']);
 
+
+//Admin panel Routes
+Route::get('/admin/posts/create', [PostController::class, 'create']);
+Route::get('/admin/posts/edit', [PostController::class, 'edit']);
+
+//User panel routes
+Route::get('/user/{author:username}', function (User $author){
+    return view('user_posts', [
+        'posts'=> $author -> posts,
+        'comments' => $author -> comments
+    ]);
+});
+
+Route::get('/user/post/edit/{post:id}',[App\Http\Controllers\UserController::class, 'edit_post'])->name('user.post.edit');
+Route::post('/user/post/update/{post:id}',[App\Http\Controllers\UserController::class, 'update_post'])->name('user.post.update_post');
+
+Route::get('/user/comment/edit/{comment:id}',[App\Http\Controllers\UserController::class, 'edit_comment'])->name('user.comment.edit');
+Route::post('/user/comment/update/{comment:id}',[App\Http\Controllers\UserController::class, 'update_comment'])->name('user.comment.update_comment');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
