@@ -15,16 +15,16 @@
 
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
+
             <!-- Username -->
 
             <div class="mt-4">
-                <x-input-label for="email" :value="__('Username')" />
+                <x-input-label for="username" :value="__('Username')" />
 
                 <x-text-input id="username" class="block mt-1 w-full" type="username" name="username" :value="old('username')" required />
 
                 <x-input-error :messages="$errors->get('username')" class="mt-2" />
             </div>
-
             <!-- Email Address -->
             <div class="mt-4">
                 <x-input-label for="email" :value="__('Email')" />
