@@ -2,7 +2,15 @@
 
     @include ('components._header')
     <article>
+
+
         <header>
+
+
+            <img src="{{ asset($post->image)}}" alt="" class="rounded-xl">
+
+
+
             <div class="mt-4">
                 <a href="/posts/{{$post -> slug}}">
                     {{$post -> title}}

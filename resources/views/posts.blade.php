@@ -5,6 +5,8 @@
     <p class="pt-4">
         Categories:
         @foreach ($posts as $post)
+
+            <img src="{{ asset('images/' . $post->image) }}" alt="" class="rounded-xl">
         @foreach($post -> categories as $category)
             <a href="/category/{{$category -> slug}}">
                 {{$category -> title}}

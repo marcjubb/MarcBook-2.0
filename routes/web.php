@@ -36,16 +36,18 @@ Route::get('/author/{author:username}', function (User $author){
 
 
 //Admin panel Routes
-Route::get('/admin/posts/create', [PostController::class, 'create']);
+//Route::get('/admin/posts/create', [PostController::class, 'create']);
 Route::get('/admin/posts/edit', [PostController::class, 'edit']);
 
 
+Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create');
+Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post');
 
-Route::get('/user/post/edit/{post:id}',[App\Http\Controllers\UserController::class, 'edit_post'])->name('user.post.edit');
-Route::post('/user/post/update/{post:id}',[App\Http\Controllers\UserController::class, 'update_post'])->name('user.post.update_post');
+Route::get('/user/post/edit/{post:id}',[App\Http\Controllers\PostController::class, 'edit_post'])->name('user.post.edit');
+Route::post('/user/post/update/{post:id}',[App\Http\Controllers\PostController::class, 'update_post'])->name('user.post.update_post');
 
-Route::get('/user/comment/edit/{comment:id}',[App\Http\Controllers\UserController::class, 'edit_comment'])->name('user.comment.edit');
-Route::post('/user/comment/update/{comment:id}',[App\Http\Controllers\UserController::class, 'update_comment'])->name('user.comment.update_comment');
+Route::get('/user/comment/edit/{comment:id}',[App\Http\Controllers\PostCommentsController::class, 'edit_comment'])->name('user.comment.edit');
+Route::post('/user/comment/update/{comment:id}',[App\Http\Controllers\PostCommentsController::class, 'update_comment'])->name('user.comment.update_comment');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -16,7 +16,7 @@ class Post extends Model
     use HasFactory;
 
     protected $with = ['author','categories','comments'];
-
+    protected $fillable = ['user_id','body','title','category_id','slug','image'];
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, fn($query, $search) =>
