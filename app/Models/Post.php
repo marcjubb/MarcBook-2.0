@@ -15,7 +15,7 @@ class Post extends Model
 
     use HasFactory;
 
-    protected $with = ['author','categories'];
+    protected $with = ['author','categories','comments'];
 
     public function scopeFilter($query, array $filters)
     {

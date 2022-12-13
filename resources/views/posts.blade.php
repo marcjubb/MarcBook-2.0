@@ -23,11 +23,17 @@
             <x-post-card
                 :post="$post"
                 class="{{'col-span-3'}}"/>
+                    @if(!auth()->user()==null)
+                    @if($post->author == auth()->user()|| auth()-> user()->is_admin)
 
-                        <a class="btn btn-primary" href="{{route('user.post.edit', $post->id)}}">Edit</a>
-
+                        <button>
+                            <a class="btn btn-primary" href="{{route('user.post.edit', $post->id)}}">Edit</a>
+                        </button>
+                    @endif
+                    @endif
 
                 @endforeach
+
         @else
             <p class="text-center">No posts yet</p>
         @endif
@@ -39,9 +45,13 @@
                     <h3>Commented on {{$comment -> post -> title}}</h3>
                     <x-comment-card
                         :comment="$comment"/>
-                    <button>
-                        <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
-                    </button>
+                    @if(!auth()->user()==null)
+                    @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
+                        <button>
+                            <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
+                        </button>
+                    @endif
+                    @endif
                 @endforeach
             @else
                 <p class="text-center">No comments yet</p>

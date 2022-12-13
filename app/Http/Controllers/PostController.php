@@ -16,7 +16,11 @@ class PostController extends Controller
         ]);
     }
 
+    private function storeImage($request){
+        $newImageName = uniqid('', true) . '-' . $request->title . '.' .
+            $request -> image -> extention;
 
+    }
 
     public function index()
     {
@@ -26,6 +30,6 @@ class PostController extends Controller
             )->paginate(10)->withQueryString()
         ]);
     }
-    
+
 }
 

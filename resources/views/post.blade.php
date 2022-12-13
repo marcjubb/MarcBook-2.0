@@ -26,10 +26,13 @@
             @include ('components.add_comment')
             @foreach ($post->comments as $comment)
                 <x-post-comment :comment="$comment"/>
-
+                @if(!auth()->user()==null)
+                    @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
                 <button>
                     <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
                 </button>
+                    @endif
+                @endif
             @endforeach
 
         </section>

@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Models\Post;
 use App\Models\User;
@@ -38,13 +39,7 @@ Route::get('/author/{author:username}', function (User $author){
 Route::get('/admin/posts/create', [PostController::class, 'create']);
 Route::get('/admin/posts/edit', [PostController::class, 'edit']);
 
-//User panel routes
-Route::get('/user/{author:username}', function (User $author){
-    return view('user_posts', [
-        'posts'=> $author -> posts,
-        'comments' => $author -> comments
-    ]);
-});
+
 
 Route::get('/user/post/edit/{post:id}',[App\Http\Controllers\UserController::class, 'edit_post'])->name('user.post.edit');
 Route::post('/user/post/update/{post:id}',[App\Http\Controllers\UserController::class, 'update_post'])->name('user.post.update_post');
@@ -57,6 +52,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    //User panel routes
+    Route::get('/user/{author:username}', function (User $author){
+        return view('profile_user_posts', [
+            'posts'=> $author -> posts,
+            'comments' => $author -> comments
+        ]);
+    })->name('user_posts_comments');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
