@@ -1,7 +1,8 @@
 
 <x-layout>
     @include ('components._header')
-    @if(!$author->image->image_path == null)
+
+    @if(!$author->image == null)
         <img src="{{ asset($author->image->image_path)}}" alt="" class="rounded-xl">
     @endif
 

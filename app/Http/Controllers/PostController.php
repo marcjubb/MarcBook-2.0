@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Facebook;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +11,11 @@ use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
+
+
+    public function facebookTest(Facebook $fb){
+        dd($fb);
+    }
     /**
      * Show the form for creating a new Post.
      *

@@ -11,6 +11,7 @@ class PostCommentsController extends Controller
 {
     public function store(Post $post)
     {
+
         request()->validate([
             'body' => 'required'
         ]);
@@ -19,13 +20,17 @@ class PostCommentsController extends Controller
             'user_id' => request()->user()->id,
             'body' => request('body')
         ]);
-      $body =  request('body');
-        $post->author()->notify(new CommentNotify($body));
+
+
+
+
+
         return back();
     }
     public function edit_comment($comment_id)
     {
         $comment = Comment::query()->where('id', '=', $comment_id)->first();
+
         return view('edit_comment', compact('comment'));
     }
     public function update_comment(Request $request, $id)

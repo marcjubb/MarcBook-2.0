@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Facebook;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+app()-> singleton('App\Http\Facebook', function ($app){
+    return new Facebook("key");
+});
+
+Route::get('/test', [PostController::class, 'facebookTest']);
 //Webpage Browsing routes
 Route::get('/', [PostController::class, 'index']) ->name('home');
 Route::get('/home', [PostController::class, 'index']) ->name('homer');
