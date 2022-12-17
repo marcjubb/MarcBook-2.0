@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Notifications\CommentNotify;
 use Livewire\Component;
 
 class CommentLive extends Component
@@ -22,13 +23,14 @@ class CommentLive extends Component
     {
         $this->validate();
 
-        sleep(1);
-        Comment::create([
+        sleep(0.5);
+        $comment = Comment::create([
             'post_id' => $this->post->id,
             'user_id' => request()->user()->id,
             'body' => $this->body,
         ]);
-
+        $userToNotify = $this->post->author;
+        $userToNotify->notify(new CommentNotify($comment));
         $this->comment = '';
 
         $this->post = Post::find($this->post->id);

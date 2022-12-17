@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Facebook;
+use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +46,12 @@ Route::get('/category/{category:slug}', function (Category $category){
 
 });
 
-
-
+Route::get('/clearnotifications',[PostCommentsController::class, 'clear_notifications'])
+    ->name('clear.notifications');
+/*Route::get('/clearnotification',[PostCommentsController::class, 'clear_notification'])
+    ->name('clear.notification');*/
+Route::get('/sendnotification',[PostCommentsController::class, 'send_notification'])
+    ->name('send.notification');
 
 //Admin panel Routes
 //Route::get('/admin/posts/create', [PostController::class, 'create']);
@@ -56,11 +61,15 @@ Route::get('/admin/posts/edit', [PostController::class, 'edit']);
 Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create');
 Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post');
 
-Route::get('/user/post/edit/{post:id}',[App\Http\Controllers\PostController::class, 'edit_post'])->name('user.post.edit');
-Route::post('/user/post/update/{post:id}',[App\Http\Controllers\PostController::class, 'update_post'])->name('user.post.update_post');
+Route::get('/user/post/edit/{post:id}',[PostController::class, 'edit_post'])
+    ->name('user.post.edit');
+Route::post('/user/post/update/{post:id}',[PostController::class, 'update_post'])
+    ->name('user.post.update_post');
 
-Route::get('/user/comment/edit/{comment:id}',[App\Http\Controllers\PostCommentsController::class, 'edit_comment'])->name('user.comment.edit');
-Route::post('/user/comment/update/{comment:id}',[App\Http\Controllers\PostCommentsController::class, 'update_comment'])->name('user.comment.update_comment');
+Route::get('/user/comment/edit/{comment:id}',[PostCommentsController::class, 'edit_comment'])
+    ->name('user.comment.edit');
+Route::post('/user/comment/update/{comment:id}',[PostCommentsController::class, 'update_comment'])
+    ->name('user.comment.update_comment');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

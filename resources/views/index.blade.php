@@ -1,6 +1,27 @@
    @include ('components._header')
 
     <main>
+        <button>
+            <a class="btn btn-primary" href="{{route('send.notification')}}">Send Notification</a>
+        </button>
+        @if(!auth()->user()==null)
+        <h1>Notifications:
+
+        @if (auth()->user()->notifications -> count())
+            @foreach (auth()->user()->notifications as $notification)
+                   <h3>You have recieved a comment: {{ $notification->data['body']}}</h3>
+               {{--{{$notification->markAsRead()}}--}}
+
+            @endforeach
+                <button>
+                    <a class="btn btn-primary" href="{{route('clear.notifications')}}">Clear Notifications</a>
+                </button>
+
+            @endif
+
+        @endif
+
+
         <h1>Category Selection:</h1>
         @if ($categories -> count())
             @foreach ($categories as $category)

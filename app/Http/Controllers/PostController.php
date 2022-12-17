@@ -30,10 +30,10 @@ class PostController extends Controller
     {
         $image = request()->file('image');
         $image->move(public_path('images'), $image->getClientOriginalName());
-        ddd("images/" . request()->file('image')->getClientOriginalName());
+
         Post::create(array_merge($this->validatePost(),[
             'user_id' => request()->user()->id,
-            'image' => "images/" . request()->file('image')->getClientOriginalName()
+           /* 'image' => "images/" . request()->file('image')->getClientOriginalName()*/
         ]));
         return redirect()->route('home')->with('success', 'Post Published!');
 
