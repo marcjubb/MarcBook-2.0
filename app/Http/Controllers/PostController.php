@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Facebook;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -31,10 +32,14 @@ class PostController extends Controller
         $image = request()->file('image');
         $image->move(public_path('images'), $image->getClientOriginalName());
 
-        Post::create(array_merge($this->validatePost(),[
+        $post = Post::create(array_merge($this->validatePost(),[
             'user_id' => request()->user()->id,
-           /* 'image' => "images/" . request()->file('image')->getClientOriginalName()*/
         ]));
+        Image::create([
+            'image_path'=> "images/" . request()->file('image')->getClientOriginalName(),
+            'imageable_id' => $post -> id,
+            'imageable_type' => 'App\Models\Post'
+        ]);
         return redirect()->route('home')->with('success', 'Post Published!');
 
     }
@@ -90,7 +95,7 @@ class PostController extends Controller
 
         return request()->validate([
             'title' => 'required',
-            //'image' => ['required', 'image','mimes:jpeg,png,jpg,gif,svg'],
+
             'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post)],
             'body' => 'required',
             'category_id' => ['required', Rule::exists('categories', 'id')]
