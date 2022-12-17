@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 
 class Post extends Model
@@ -17,6 +17,7 @@ class Post extends Model
 
     protected $with = ['author','categories','comments'];
     protected $fillable = ['user_id','body','title','category_id','slug','image'];
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, fn($query, $search) =>
@@ -25,11 +26,6 @@ class Post extends Model
             ->orWhere('body', 'like', '%' . $search . '%')
         )
         );
-        /*$query->when($filters['category'] ?? false, fn($query, $category) =>
-        $query->whereHas('category', fn ($query) =>
-        $query->where('slug', $category)
-        )
-        );*/
         $query->when($filters['author'] ?? false, fn($query, $author) =>
         $query->whereHas('author', fn ($query) =>
         $query->where('username', $author)
@@ -50,6 +46,9 @@ class Post extends Model
         return $this->BelongsToMany(Category::class, 'category_post',
             'post_id','category_id');
     }
-
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 
 }

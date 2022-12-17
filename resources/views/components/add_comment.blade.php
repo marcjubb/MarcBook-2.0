@@ -30,3 +30,14 @@
         <a href="/login" class="hover:underline">log in</a> to leave a comment.
     </p>
 @endauth
+
+
+@auth
+
+
+@else
+    <p class="font-semibold">
+        <a href="/register" class="hover:underline">Register</a> or
+        <a href="/login" class="hover:underline">log in</a> to leave a comment.
+    </p>
+@endauth

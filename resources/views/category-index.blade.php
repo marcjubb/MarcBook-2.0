@@ -1,17 +1,6 @@
    @include ('components._header')
-
+    <h1>Category name: {{$category -> name}}</h1>
     <main>
-        <h1>Category Selection:</h1>
-        @if ($categories -> count())
-            @foreach ($categories as $category)
-                <a href="/category/{{$category -> slug }}">
-                    <h3 class="font-bold">{{$category -> name}}</h3>
-                </a>
-            @endforeach
-        @else
-            <p class="text-center">No Categories</p>
-        @endif
-        <h1>All posts :</h1>
         @if ($posts -> count())
             @foreach ($posts as $post)
                 <x-post-card

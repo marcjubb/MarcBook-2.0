@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Notifications\CommentNotify;
 use Illuminate\Http\Request;
 
 class PostCommentsController extends Controller
@@ -18,7 +19,8 @@ class PostCommentsController extends Controller
             'user_id' => request()->user()->id,
             'body' => request('body')
         ]);
-
+      $body =  request('body');
+        $post->author()->notify(new CommentNotify($body));
         return back();
     }
     public function edit_comment($comment_id)

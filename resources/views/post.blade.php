@@ -1,14 +1,15 @@
-<x-layout>
 
+<x-layout xmlns:livewire="http://www.w3.org/1999/html">
+    @livewireStyles
     @include ('components._header')
     <article>
 
 
         <header>
 
-
-            <img src="{{ asset($post->image)}}" alt="" class="rounded-xl">
-
+            @if(!$post->image == null)
+            <img src="{{ asset($post->image->image_path)}}" alt="" class="rounded-xl">
+            @endif
 
 
             <div class="mt-4">
@@ -28,22 +29,14 @@
             </a>
         </div>
 
-        <h2>Comments</h2>
 
-        <section class="col-span-8 col-start-5 mt-10 space-y-6">
-            @include ('components.add_comment')
-            @foreach ($post->comments as $comment)
-                <x-post-comment :comment="$comment"/>
-                @if(!auth()->user()==null)
-                    @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
-                <button>
-                    <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
-                </button>
-                    @endif
-                @endif
-            @endforeach
+        <h2>ajax Comments</h2>
 
-        </section>
+
+       <livewire:comment-live :post="$post" />
+
+
+        @livewireScripts
 
     </article>
 

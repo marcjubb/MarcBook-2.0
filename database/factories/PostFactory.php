@@ -24,7 +24,7 @@ class PostFactory extends Factory
             'slug' => fake()->slug,
             'title' => fake()->sentence,
             'body' => fake()->sentence,
-            'image' =>fake()->imageUrl(100,100)
+            //'image' =>fake()->imageUrl(100,100)
         ];
     }
 }

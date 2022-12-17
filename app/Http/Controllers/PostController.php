@@ -24,6 +24,7 @@ class PostController extends Controller
     {
         $image = request()->file('image');
         $image->move(public_path('images'), $image->getClientOriginalName());
+        ddd("images/" . request()->file('image')->getClientOriginalName());
         Post::create(array_merge($this->validatePost(),[
             'user_id' => request()->user()->id,
             'image' => "images/" . request()->file('image')->getClientOriginalName()
@@ -33,6 +34,7 @@ class PostController extends Controller
     }
     public function show(Post $post)
     {
+
         return view('post', [
             'post' => $post
         ]);
@@ -41,6 +43,7 @@ class PostController extends Controller
     public function index()
     {
         return view('index', [
+            'categories'=> Category::all(),
             'posts' => Post::query()->latest()->filter(
                 request(['search', 'author'])
             )->paginate(10)->withQueryString()

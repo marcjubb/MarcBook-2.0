@@ -1,19 +1,11 @@
 
 <x-layout>
     @include ('components._header')
+    @if(!$author->image->image_path == null)
+        <img src="{{ asset($author->image->image_path)}}" alt="" class="rounded-xl">
+    @endif
 
-    <p class="pt-4">
-        Categories:
-        @foreach ($posts as $post)
-
-            <img src="{{ asset('images/' . $post->image) }}" alt="" class="rounded-xl">
-        @foreach($post -> categories as $category)
-            <a href="/category/{{$category -> slug}}">
-                {{$category -> title}}
-            </a>
-        @endforeach
-        @endforeach
-    </p>
+    <h1>{{$author -> name}}'s Page</h1>
 
 
     <h1>Posts</h1>

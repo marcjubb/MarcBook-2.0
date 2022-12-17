@@ -2,7 +2,7 @@
 
 <article>
     <header>
-        <div class="mt-4">
+        <div class="mt-4",>
             <a href="/posts/{{$post -> slug}}">
                 {{$post -> title}}
             </a>
