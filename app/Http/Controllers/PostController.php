@@ -78,6 +78,16 @@ class PostController extends Controller
         $post->category_id = $request->category_id;
         $post->save();
 
+        $image = request()->file('image');
+        $image->move(public_path('images'), $image->getClientOriginalName());
+
+        $image = Image::query()->where('imageable_id', '=', $id )
+            ->where('imageable_type', '=', "App\Models\Post")->first();
+
+
+
+        $image -> image_path = "images/" . request()->file('image')->getClientOriginalName();
+        $image ->save();
         return redirect()->route('home')->with('success', 'Project Updated Successfully!');
 
     }
@@ -95,7 +105,6 @@ class PostController extends Controller
 
         return request()->validate([
             'title' => 'required',
-
             'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post)],
             'body' => 'required',
             'category_id' => ['required', Rule::exists('categories', 'id')]

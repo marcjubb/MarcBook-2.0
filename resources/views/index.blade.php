@@ -9,8 +9,31 @@
 
         @if (auth()->user()->notifications -> count())
             @foreach (auth()->user()->notifications as $notification)
+                @if($notification->type =="")
                    <h3>You have recieved a comment: {{ $notification->data['body']}}</h3>
-               {{--{{$notification->markAsRead()}}--}}
+                <h4>This was commented on post:</h4>
+                    @php
+                $id = $notification->data['comment_id'];
+                $post = \App\Models\Comment::query()->where('id','=',$id )->first()->post;
+                @endphp
+                    <a href="/posts/{{$post -> slug }}">
+                        <h3 class="font-bold">
+                            {{$post->title}}</h3>
+                    </a>
+                    @else
+
+                        <h3>Admin has edited your post: {{ $notification->data['body']}}</h3>
+                        <h4>This was commented on post:</h4>
+                        @php
+                            $id = $notification->data['comment_id'];
+                            $post = \App\Models\Comment::query()->where('id','=',$id )->first()->post;
+                        @endphp
+                        <a href="/posts/{{$post -> slug }}">
+                            <h3 class="font-bold">
+                                {{$post->title}}</h3>
+                        </a>
+
+                    @endif
 
             @endforeach
                 <button>
