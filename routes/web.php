@@ -2,7 +2,7 @@
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisterController;
+
 use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Post;
