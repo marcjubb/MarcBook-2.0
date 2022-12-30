@@ -57,6 +57,7 @@ class PostController extends Controller
 
     public function index()
     {
+
         return view('index', [
             'categories'=> Category::all(),
             'posts' => Post::query()->latest()->filter(
@@ -64,6 +65,7 @@ class PostController extends Controller
             )->paginate(10)->withQueryString()
         ]);
     }
+
     public function update_post(Request $request, $id)
     {
 

@@ -29,6 +29,9 @@ app()-> singleton('App\Http\Twitter', function ($app){
     return new Twitter("key","skey");
 });
 
+
+
+
 Route::get('/test', [PostController::class, 'twitterTest']);
 //Webpage Browsing routes
 Route::get('/', [PostController::class, 'index']) ->name('home');
@@ -49,6 +52,8 @@ Route::get('/category/{category:slug}', function (Category $category){
         'posts'=> $category -> posts]);
 
 });
+
+
 
 Route::get('/clearnotifications',[PostCommentsController::class, 'clear_notifications'])
     ->name('clear.notifications');

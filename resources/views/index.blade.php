@@ -57,8 +57,34 @@
                 @endif
                 @endif
             @endforeach
+
         @else
-            <p class="text-center">No posts yet</p>
+            <p class="text-center">No posts yet on current page</p>
         @endif
+            <nav class="p-pagination" aria-label="Pagination">
+                <ol class="p-pagination__items">
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link--previous" href="#previous" title="Previous page"><i class="p-icon--chevron-down">Previous page</i></a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link" href="?page=1" aria-label="Page 1">1</a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link" href="?page=2" aria-label="Page 2">2</a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link"  href="?page=3"  aria-label="Page 3">3</a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link" href="?page=4"  aria-label="Page 4">4</a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link" href="?page=5"  aria-label="Page 5">5</a>
+                    </li>
+                    <li class="p-pagination__item">
+                        <a class="p-pagination__link--next" href="?page=next" title="Next page"><i class="p-icon--chevron-down">Next page</i></a>
+                    </li>
+                </ol>
+            </nav>
     </main>
     </x-guest-layout>
