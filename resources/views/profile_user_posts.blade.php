@@ -1,4 +1,4 @@
-
+<x-guest-layout>
 <x-layout>
     @include ('components._header')
     <h1>Your Posts & Comments</h1>
@@ -52,3 +52,4 @@
 
 </x-layout>
 
+    </x-guest-layout>

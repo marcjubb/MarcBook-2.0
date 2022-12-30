@@ -1,8 +1,4 @@
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-
-        </x-slot>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
@@ -18,13 +14,14 @@
 
             <!-- Username -->
 
-            <div class="mt-4">
+            <div>
                 <x-input-label for="username" :value="__('Username')" />
 
                 <x-text-input id="username" class="block mt-1 w-full" type="username" name="username" :value="old('username')" required />
 
                 <x-input-error :messages="$errors->get('username')" class="mt-2" />
             </div>
+
             <!-- Email Address -->
             <div class="mt-4">
                 <x-input-label for="email" :value="__('Email')" />
@@ -67,5 +64,5 @@
                 </x-primary-button>
             </div>
         </form>
-    </x-auth-card>
+
 </x-guest-layout>

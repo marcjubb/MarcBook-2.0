@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Facebook;
+use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Post;
@@ -15,6 +16,9 @@ class PostController extends Controller
 
 
     public function facebookTest(Facebook $fb){
+        dd($fb);
+    }
+    public function twitterTest(Twitter $fb){
         dd($fb);
     }
     /**

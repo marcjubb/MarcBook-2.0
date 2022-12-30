@@ -1,3 +1,4 @@
+<x-guest-layout>
 <!DOCTYPE html>
 <html lang="en">
 <body>
@@ -51,3 +52,4 @@
 
 </body>
 </html>
+    </x-guest-layout>

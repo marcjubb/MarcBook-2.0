@@ -1,3 +1,4 @@
+<x-guest-layout>
    @include ('components._header')
     <h1>Category name: {{$category -> name}}</h1>
     <main>
@@ -18,3 +19,4 @@
             <p class="text-center">No posts yet</p>
         @endif
     </main>
+    </x-guest-layout>
