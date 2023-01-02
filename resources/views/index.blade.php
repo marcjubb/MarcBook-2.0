@@ -7,7 +7,7 @@
             <a class="btn btn-primary" href="{{route('send.notification')}}">Send Notification</a>
         </button>
         @if(!auth()->user()==null)
-        <h1>Notifications:
+        <h1>Notifications: </h1>
 
         @if (auth()->user()->notifications -> count())
             @foreach (auth()->user()->notifications as $notification)

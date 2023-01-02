@@ -33,7 +33,7 @@ app()-> singleton('App\Http\GNews', function ($app){
 
 
 
-Route::get('/test', [PostController::class, 'gnewsTest']);
+Route::get('/api', [PostController::class, 'gnewsTest']);
 //Webpage Browsing routes
 Route::get('/', [PostController::class, 'index']) ->name('home');
 Route::get('/home', [PostController::class, 'index']) ->name('homer');

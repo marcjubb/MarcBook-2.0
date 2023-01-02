@@ -13,7 +13,7 @@ class GNews
     public function __construct($apiKey)
     {
         $this->apikey = $apiKey;
-        $this->url = "https://gnews.io/api/v4/search?q=example&token=$this->apikey&lang=en&country=us&max=10";
+        $this->url = "https://gnews.io/api/v4/search?q=example&token=$this->apikey&lang=en&country=us&max=5";
 
     }
     public function get_articles()

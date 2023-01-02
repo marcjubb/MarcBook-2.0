@@ -1,0 +1,12 @@
+// Override default Vanilla settings in your main Sass file
+$breakpoint-navigation-threshold: 900px;
+$color-accent: #7cf0ee;
+$font-base-family: 'Merriweather';
+$grid-max-width: 1440px;
+$font-weight-bold: 600;
+
+// Import the framework
+@import 'node_modules/vanilla-framework';
+
+// Include all of Vanilla Framework
+@include vanilla;

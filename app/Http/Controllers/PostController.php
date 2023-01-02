@@ -16,8 +16,12 @@ class PostController extends Controller
 {
 
 
-    public function gnewsTest(GNews $gg){
-        dd($gg ->get_articles());
+    public function gnewsTest(GNews $GNews){
+
+        return view('gnews', [
+            'articles' => $GNews ->get_articles()
+        ]);
+
     }
     public function twitterTest(Twitter $fb){
         dd($fb);
