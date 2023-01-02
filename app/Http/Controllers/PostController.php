@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Facebook;
+use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Image;
@@ -15,8 +16,8 @@ class PostController extends Controller
 {
 
 
-    public function facebookTest(Facebook $fb){
-        dd($fb);
+    public function gnewsTest(GNews $gg){
+        dd($gg ->pull());
     }
     public function twitterTest(Twitter $fb){
         dd($fb);

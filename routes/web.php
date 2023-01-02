@@ -3,6 +3,7 @@ use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Post;
@@ -25,14 +26,14 @@ use App\Http\Controllers;
 app()-> singleton('App\Http\Facebook', function ($app){
     return new Facebook("key");
 });
-app()-> singleton('App\Http\Twitter', function ($app){
-    return new Twitter("key","skey");
+app()-> singleton('App\Http\GNews', function ($app){
+    return new GNews("57c5c660c0d558f175431aed521c4b42");
 });
 
 
 
 
-Route::get('/test', [PostController::class, 'twitterTest']);
+Route::get('/test', [PostController::class, 'gnewsTest']);
 //Webpage Browsing routes
 Route::get('/', [PostController::class, 'index']) ->name('home');
 Route::get('/home', [PostController::class, 'index']) ->name('homer');
