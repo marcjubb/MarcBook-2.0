@@ -17,7 +17,7 @@ class PostController extends Controller
 
 
     public function gnewsTest(GNews $gg){
-        dd($gg ->pull());
+        dd($gg ->get_articles());
     }
     public function twitterTest(Twitter $fb){
         dd($fb);

@@ -16,7 +16,7 @@ class GNews
         $this->url = "https://gnews.io/api/v4/search?q=example&token=$this->apikey&lang=en&country=us&max=10";
 
     }
-    public function pull()
+    public function get_articles()
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this -> url);
