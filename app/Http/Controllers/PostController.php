@@ -23,9 +23,7 @@ class PostController extends Controller
         ]);
 
     }
-    public function twitterTest(Twitter $fb){
-        dd($fb);
-    }
+
     /**
      * Show the form for creating a new Post.
      *

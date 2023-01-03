@@ -27,10 +27,5 @@ class HomepageTest extends TestCase
         $response = $this->get('/');
         $response->assertSee($category->name);
     }
-    public function test_user_can_login()
-    {
-        $category = Category::query()->first();
-        $response = $this->get('/');
-        $response->assertSee($category->name);
-    }
+
 }

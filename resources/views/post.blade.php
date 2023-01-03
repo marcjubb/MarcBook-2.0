@@ -1,5 +1,6 @@
 <x-guest-layout>
 <x-layout xmlns:livewire="http://www.w3.org/1999/html">
+
     @livewireStyles
     @include ('components._header')
     <article>

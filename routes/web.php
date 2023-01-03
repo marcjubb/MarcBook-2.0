@@ -68,22 +68,19 @@ Route::get('/sendnotification',[PostCommentsController::class, 'send_notificatio
 Route::get('/admin/posts/edit', [PostController::class, 'edit']);
 
 
-Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create');
-Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post');
+Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create')->middleware('auth');
+Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post')->middleware('auth');
 
-Route::get('/user/post/edit/{post:id}',[PostController::class, 'edit_post'])
+Route::get('/user/post/edit/{post:id}',[PostController::class, 'edit_post'])->middleware('auth')
     ->name('user.post.edit');
-Route::post('/user/post/update/{post:id}',[PostController::class, 'update_post'])
+Route::post('/user/post/update/{post:id}',[PostController::class, 'update_post'])->middleware('auth')
     ->name('user.post.update_post');
 
-Route::get('/user/comment/edit/{comment:id}',[PostCommentsController::class, 'edit_comment'])
+Route::get('/user/comment/edit/{comment:id}',[PostCommentsController::class, 'edit_comment'])->middleware('auth')
     ->name('user.comment.edit');
-Route::post('/user/comment/update/{comment:id}',[PostCommentsController::class, 'update_comment'])
+Route::post('/user/comment/update/{comment:id}',[PostCommentsController::class, 'update_comment'])->middleware('auth')
     ->name('user.comment.update_comment');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 
@@ -95,8 +92,6 @@ Route::middleware('auth')->group(function () {
         ]);
     })->name('user_posts_comments');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 require __DIR__.'/auth.php';

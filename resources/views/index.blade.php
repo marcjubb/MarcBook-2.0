@@ -3,9 +3,9 @@
    @include ('components._header')
 
     <main>
-        <button>
+        {{--<button>
             <a class="btn btn-primary" href="{{route('send.notification')}}">Send Notification</a>
-        </button>
+        </button>--}}
         @if(!auth()->user()==null)
         <h1>Notifications: </h1>
 
@@ -37,7 +37,7 @@
         @if ($categories -> count())
             @foreach ($categories as $category)
                 <a href="/category/{{$category -> slug }}">
-                    <h3 class="font-bold">{{$category -> name}}</h3>
+                    <h3 class="font-bold col-span-3 mt-4">{{$category -> name}}</h3>
                 </a>
             @endforeach
         @else
@@ -48,7 +48,7 @@
             @foreach ($posts as $post)
                 <x-post-card
                     :post="$post"
-                    class="{{ $loop -> iteration < 3 ? 'col-span-3' : 'col-span-2'}}"/>
+                    class="col-span-3"/>
             @if(!auth()->user()==null)
                 @if($post->author == auth()->user()|| auth()-> user()->is_admin)
                     <button>
