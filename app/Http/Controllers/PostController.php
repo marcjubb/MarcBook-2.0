@@ -35,6 +35,7 @@ class PostController extends Controller
         $categories = Category::all();
         return view('create_post',compact('categories'));
     }
+
     public function store()
     {
         $image = request()->file('image');
@@ -51,6 +52,7 @@ class PostController extends Controller
             ]);
 
         }
+
         Post::create(array_merge($this->validatePost(), [
             'user_id' => request()->user()->id,
         ]));
@@ -75,7 +77,23 @@ class PostController extends Controller
             )->paginate(10)->withQueryString()
         ]);
     }
+    public function uploadPP(Request $request){
 
+        $id = Auth::user()->id;
+        $image = request()->file('image');
+        if($image !== null) {
+            $image->move(public_path('images'), $image->getClientOriginalName());
+                Image::create([
+                    'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
+                    'imageable_id' => $id,
+                    'imageable_type' => 'App\Models\User'
+                ]);
+
+
+        }
+        return redirect()->back()->with('success', 'Profile Picture Updated!');
+
+    }
     public function update_post(Request $request, $id)
     {
 
@@ -118,7 +136,7 @@ class PostController extends Controller
     public function edit_post($post_id)
     {
         $post = Post::query()->where('id', '=', $post_id)->first();
-        if(Auth::user()->id === $post->author->id){
+        if(Auth::user()->id === $post->author->id|| Auth::user()->is_admin){
             $categories = Category::all();
             return view('edit_post', compact('post','categories'));
         }
@@ -131,10 +149,11 @@ class PostController extends Controller
         $post ??= new Post();
 
         return request()->validate([
-            'title' => 'required',
+            'title' => ['required', 'max:255'],
             'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post)],
             'body' => 'required',
-            'category_id' => ['required', Rule::exists('categories', 'id')]
+            'category_id' => ['required', Rule::exists('categories', 'id')],
+            'image' => 'mimes:jpeg,jpg,png,gif'
         ]);
 
     }

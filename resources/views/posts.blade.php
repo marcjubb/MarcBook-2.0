@@ -2,8 +2,23 @@
 <x-layout>
     @include ('components._header')
 
+
+
     @if(!$author->image == null)
-        <img src="{{ asset($author->image->image_path)}}" alt="" class="rounded-xl">
+        <section class="p-strip u-image-position">
+        <img src="{{ asset($author->image->image_path)}}" width="250" height="500"alt="" >
+        </section>
+    @elseif(Auth::user()->username === $author->username)
+        <form action="{{route('user.uploadpp')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+        <div class="form-group m-3 p-3">
+            <label for="body">Chose a Profile Picture</label>
+            <label>
+                <input class="form-control" name="image" type="file" >
+            </label>
+        </div>
+            <button  type="submit" value="submit">Upload Profile picture</button>
+            </form>
     @endif
 
     <h1>{{$author -> name}}'s Page</h1>

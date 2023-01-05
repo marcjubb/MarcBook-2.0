@@ -68,6 +68,7 @@ Route::get('/sendnotification',[PostCommentsController::class, 'send_notificatio
 
 Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create')->middleware('auth');
 Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post')->middleware('auth');
+Route::post('/user/uploadpp',[PostController::class, 'uploadPP'])->name('user.uploadpp')->middleware('auth');
 
 Route::get('/user/post/edit/{post:id}',[PostController::class, 'edit_post'])->middleware('auth')
     ->name('user.post.edit');

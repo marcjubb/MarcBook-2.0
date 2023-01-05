@@ -11,6 +11,7 @@ class Image extends Model
 {
     protected $fillable = ['image_path','imageable_id','imageable_type'];
     public $timestamps = false;
+
     public function imageable(): MorphTo
     {
         return $this->morphTo();

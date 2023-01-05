@@ -2,12 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<h1 class="text-center">Edit Post</h1>
+<h1 class="text-center">Create Post</h1>
 <hr>
 <div class=" mt-2 ">
     <form action="{{route('user.post.publish_post')}}" method="POST" enctype="multipart/form-data">
         @csrf
-
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="form-group m-3 p-3">
             <label for="title">Post Title</label>
             <label>
