@@ -63,9 +63,7 @@ Route::get('/clearnotifications',[PostCommentsController::class, 'clear_notifica
 Route::get('/sendnotification',[PostCommentsController::class, 'send_notification'])
     ->name('send.notification');
 
-//Admin panel Routes
-//Route::get('/admin/posts/create', [PostController::class, 'create']);
-Route::get('/admin/posts/edit', [PostController::class, 'edit']);
+
 
 
 Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create')->middleware('auth');

@@ -8,6 +8,7 @@ use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Post;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -37,16 +38,22 @@ class PostController extends Controller
     public function store()
     {
         $image = request()->file('image');
-        $image->move(public_path('images'), $image->getClientOriginalName());
+        if($image !== null) {
+            $image->move(public_path('images'), $image->getClientOriginalName());
 
-        $post = Post::create(array_merge($this->validatePost(),[
+            $post = Post::create(array_merge($this->validatePost(), [
+                'user_id' => request()->user()->id,
+            ]));
+            Image::create([
+                'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
+                'imageable_id' => $post->id,
+                'imageable_type' => 'App\Models\Post'
+            ]);
+
+        }
+        Post::create(array_merge($this->validatePost(), [
             'user_id' => request()->user()->id,
         ]));
-        Image::create([
-            'image_path'=> "images/" . request()->file('image')->getClientOriginalName(),
-            'imageable_id' => $post -> id,
-            'imageable_type' => 'App\Models\Post'
-        ]);
         return redirect()->route('home')->with('success', 'Post Published!');
 
     }
@@ -88,24 +95,35 @@ class PostController extends Controller
         $post->save();
 
         $image = request()->file('image');
-        $image->move(public_path('images'), $image->getClientOriginalName());
+        if($image !== null) {
+            $image->move(public_path('images'), $image->getClientOriginalName());
 
-        $image = Image::query()->where('imageable_id', '=', $id )
-            ->where('imageable_type', '=', "App\Models\Post")->first();
+            $image = Image::query()->where('imageable_id', '=', $id)
+                ->where('imageable_type', '=', "App\Models\Post")->first();
+            if($image !== null) {
+                $image->image_path = "images/" . request()->file('image')->getClientOriginalName();
+                $image->save();
+            }else{
+                Image::create([
+                    'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
+                    'imageable_id' => $post->id,
+                    'imageable_type' => 'App\Models\Post'
+                ]);
+            }
 
-
-
-        $image -> image_path = "images/" . request()->file('image')->getClientOriginalName();
-        $image ->save();
+        }
         return redirect()->route('home')->with('success', 'Project Updated Successfully!');
 
     }
     public function edit_post($post_id)
     {
         $post = Post::query()->where('id', '=', $post_id)->first();
+        if(Auth::user()->id === $post->author->id){
+            $categories = Category::all();
+            return view('edit_post', compact('post','categories'));
+        }
+        return redirect('/');
 
-        $categories = Category::all();
-        return view('edit_post', compact('post','categories'));
     }
 
     protected function validatePost(?Post $post = null): array

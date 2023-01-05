@@ -25,6 +25,7 @@
         <div class="form-group m-3 p-3">
             <label for="body">image</label>
             <label>
+
                 <input class="form-control" name="image" type="file" >
             </label>
         </div>
