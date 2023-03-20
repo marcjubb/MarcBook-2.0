@@ -1,7 +1,7 @@
-<x-guest-layout>
+
 <x-layout>
     @include ('components._header')
-    <h1>Your Posts & Comments</h1>
+
     <p class="pt-4">
         Categories:
         @foreach ($products as $product)
@@ -22,10 +22,11 @@
                     :product="$product"
                     class="{{'col-span-3' }}"/>
 
+                @if($product->author == auth()->user()|| auth()-> user()->is_admin)
                 <button>
                 <a class="btn btn-primary" href="{{route('user.product.edit', $product->id)}}">Edit</a>
                 </button>
-
+                @endif
             @endforeach
         @else
             <p class="text-center">No products yet</p>
@@ -38,11 +39,11 @@
                 <h3>Commented on {{$comment -> product -> title}}</h3>
                 <x-comment-card
                     :comment="$comment"/>
-
+                    @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
                     <button>
                         <a class="btn btn-primary" href="{{route('user.comment.edit', $comment->id)}}">Edit</a>
                     </button>
-
+                    @endif
             @endforeach
         @else
             <p class="text-center">No comments yet</p>
@@ -52,4 +53,3 @@
 
 </x-layout>
 
-    </x-guest-layout>

@@ -39,14 +39,11 @@ class User extends Authenticatable
     ];
 
 
-    public function posts(): HasMany
+    public function products(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Product::class);
     }
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
+
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');

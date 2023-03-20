@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comment;
-
+use App\Models\Product;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CommentsTableSeeder extends Seeder
+class ProductsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class CommentsTableSeeder extends Seeder
      */
     public function run()
     {
-        Comment::factory()->count(50)->create();
+        Product::factory()->count(25)->create();
     }
 }

@@ -10,12 +10,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 
-class Post extends Model
+class Product extends Model
 {
 
     use HasFactory;
 
-    protected $with = ['author','categories','comments'];
+    protected $with = ['author','categories'];
     protected $fillable = ['user_id','body','title','category_id','slug','image'];
 
     public function scopeFilter($query, array $filters)
@@ -33,18 +33,15 @@ class Post extends Model
         );
     }
 
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class,'user_id');
     }
     public function categories(): BelongsToMany
     {
-        return $this->BelongsToMany(Category::class, 'category_post',
-            'post_id','category_id');
+        return $this->BelongsToMany(Category::class, 'category_product',
+            'product_id','category_id');
     }
     public function image(): MorphOne
     {

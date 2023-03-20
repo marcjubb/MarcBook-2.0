@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory
  */
-class PostFactory extends Factory
+class ProductFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,12 +19,11 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'=> fake()-> numberBetween(1,User::query()->count()),
             'category_id'=> fake()-> numberBetween(1,Category::query()->count()),
             'slug' => fake()->slug,
-            'title' => fake()->sentence,
+            'title' => fake()->word(),
             'body' => fake()->sentence,
-            //'image' =>fake()->imageUrl(100,100)
+            'price' => $this->faker->randomFloat('2',0,2),
         ];
     }
 }

@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
-use App\Models\Post;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -17,7 +17,7 @@ class HomepageTest extends TestCase
      */
     public function test_user_can_view_post()
     {
-        $post = Post::query()->first();
+        $post = Product::query()->latest();
         $response = $this->get('/');
         $response->assertSee($post->title);
     }

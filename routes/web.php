@@ -6,7 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Category;
-use App\Models\Post;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Facebook;
@@ -26,24 +26,24 @@ use App\Http\Controllers;
 app()-> singleton('App\Http\Facebook', function ($app){
     return new Facebook("key");
 });
+
+
 app()-> singleton('App\Http\GNews', function ($app){
     return new GNews("57c5c660c0d558f175431aed521c4b42");
 });
-
-
-
-
 Route::get('/api', [PostController::class, 'gnewsTest']);
+
+
+
 //Webpage Browsing routes
 Route::get('/', [PostController::class, 'index']) ->name('home');
 Route::get('/home', [PostController::class, 'index']) ->name('homer');
 Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 Route::post('/posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
 Route::get('/author/{author:username}', function (User $author){
-    return view('posts', [
+    return view('products', [
         'author'=> $author,
-        'posts'=> $author -> posts,
-        'comments' => $author -> comments
+        'products'=> $author -> products(),
     ]);
 
 });
@@ -53,7 +53,6 @@ Route::get('/category/{category:slug}', function (Category $category){
         'posts'=> $category -> posts]);
 
 });
-
 
 
 Route::get('/clearnotifications',[PostCommentsController::class, 'clear_notifications'])
@@ -86,7 +85,7 @@ Route::middleware('auth')->group(function () {
     //User panel routes
     Route::get('/user/{author:username}', function (User $author){
         return view('profile_user_posts', [
-            'posts'=> $author -> posts,
+            'products'=> $author -> products(),
             'comments' => $author -> comments
         ]);
     })->name('user_posts_comments');

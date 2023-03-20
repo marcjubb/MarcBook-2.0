@@ -10,9 +10,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function posts(): BelongsToMany
+    public function products(): BelongsToMany
     {
-        return $this->BelongsToMany(Post::class, 'category_post',
-            'category_id','post_id');
+        return $this->BelongsToMany(Product::class, 'category_product',
+            'category_id','product_id');
     }
 }

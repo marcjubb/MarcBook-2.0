@@ -7,7 +7,7 @@ use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Category;
 use App\Models\Image;
-use App\Models\Post;
+use App\Models\Product;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('create_post',compact('categories'));
+        return view('create_product',compact('categories'));
     }
 
     public function store()
@@ -42,37 +42,35 @@ class PostController extends Controller
         if($image !== null) {
             $image->move(public_path('images'), $image->getClientOriginalName());
 
-            $post = Post::create(array_merge($this->validatePost(), [
+            $product = Product::create(array_merge($this->validatePost(), [
                 'user_id' => request()->user()->id,
             ]));
             Image::create([
                 'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
-                'imageable_id' => $post->id,
-                'imageable_type' => 'App\Models\Post'
+                'imageable_id' => $product->id,
+                'imageable_type' => 'App\Models\Product'
             ]);
 
         }
 
-        Post::create(array_merge($this->validatePost(), [
+        Product::create(array_merge($this->validatePost(), [
             'user_id' => request()->user()->id,
         ]));
         return redirect()->route('home')->with('success', 'Post Published!');
 
     }
-    public function show(Post $post)
+    public function show(Product $product)
     {
 
-        return view('post', [
-            'post' => $post
+        return view('product', [
+            'product' => $product
         ]);
     }
-
     public function index()
     {
-
         return view('index', [
             'categories'=> Category::all(),
-            'posts' => Post::query()->latest()->filter(
+            'products' => Product::query()->latest()->filter(
                 request(['search', 'author'])
             )->paginate(10)->withQueryString()
         ]);
@@ -94,7 +92,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Profile Picture Updated!');
 
     }
-    public function update_post(Request $request, $id)
+    public function update_product(Request $request, $id)
     {
 
         $this->validate($request, [
@@ -103,21 +101,21 @@ class PostController extends Controller
             'category_id' => 'required'
         ]);
 
-        $post = Post::query()->where('id', '=', $id)->first();
-        if ($request->user()->cannot('update', $post)) {
+        $product = Product::query()->where('id', '=', $id)->first();
+        if ($request->user()->cannot('update', $product)) {
             abort(403);
         }
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->category_id = $request->category_id;
-        $post->save();
+        $product->title = $request->title;
+        $product->body = $request->body;
+        $product->category_id = $request->category_id;
+        $product->save();
 
         $image = request()->file('image');
         if($image !== null) {
             $image->move(public_path('images'), $image->getClientOriginalName());
 
             $image = Image::query()->where('imageable_id', '=', $id)
-                ->where('imageable_type', '=', "App\Models\Post")->first();
+                ->where('imageable_type', '=', "App\Models\Product")->first();
             if($image !== null) {
                 $image->image_path = "images/" . request()->file('image')->getClientOriginalName();
                 $image->save();
@@ -125,7 +123,7 @@ class PostController extends Controller
                 Image::create([
                     'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
                     'imageable_id' => $post->id,
-                    'imageable_type' => 'App\Models\Post'
+                    'imageable_type' => 'App\Models\Product'
                 ]);
             }
 
@@ -135,7 +133,7 @@ class PostController extends Controller
     }
     public function edit_post($post_id)
     {
-        $post = Post::query()->where('id', '=', $post_id)->first();
+        $post = Product::query()->where('id', '=', $post_id)->first();
         if(Auth::user()->id === $post->author->id|| Auth::user()->is_admin){
             $categories = Category::all();
             return view('edit_post', compact('post','categories'));
@@ -144,9 +142,9 @@ class PostController extends Controller
 
     }
 
-    protected function validatePost(?Post $post = null): array
+    protected function validatePost(?Product $post = null): array
     {
-        $post ??= new Post();
+        $post ??= new Product();
 
         return request()->validate([
             'title' => ['required', 'max:255'],

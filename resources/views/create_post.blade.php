@@ -5,7 +5,7 @@
 <h1 class="text-center">Create Post</h1>
 <hr>
 <div class=" mt-2 ">
-    <form action="{{route('user.post.publish_post')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('user.product.publish_post')}}" method="POST" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
             <div class="alert alert-danger">
