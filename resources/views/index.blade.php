@@ -1,20 +1,28 @@
 <x-guest-layout>
+
    @include ('components._header')
+
     <main>
+        {{--<button>
+            <a class="btn btn-primary" href="{{route('send.notification')}}">Send Notification</a>
+        </button>--}}
         @if(!auth()->user()==null)
         <h1>Notifications: </h1>
+
         @if (auth()->user()->notifications -> count())
             @foreach (auth()->user()->notifications as $notification)
                    <h3>You have recieved a comment: {{ $notification->data['body']}}</h3>
-                <h4>This was commented on product:</h4>
+                <h4>This was commented on post:</h4>
                     @php
                 $id = $notification->data['comment_id'];
-                $product = \App\Models\Comment::query()->where('id','=',$id )->first()->product;
+                $post = \App\Models\Comment::query()->where('id','=',$id )->first()->post;
                 @endphp
-                    <a href="/products/{{$product -> slug }}">
+                    <a href="/posts/{{$post -> slug }}">
                         <h3 class="font-bold">
-                            {{$product->title}}</h3>
+                            {{$post->title}}</h3>
                     </a>
+
+
             @endforeach
                 <button>
                     <a class="btn btn-primary" href="{{route('clear.notifications')}}">Clear Notifications</a>
@@ -23,6 +31,8 @@
             @endif
 
         @endif
+
+
         <h1>Category Selection:</h1>
         @if ($categories -> count())
             @foreach ($categories as $category)
@@ -33,17 +43,18 @@
         @else
             <p class="text-center">No Categories</p>
         @endif
-        <h1>All products :</h1>
-        @if ($products -> count())
-            @foreach ($products as $product)
-                <x-product-card
-                    :product="$product"
+        <h1>All posts :</h1>
+        @if ($posts -> count())
+            @foreach ($posts as $post)
+                <x-post-card
+                    :post="$post"
                     class="col-span-3"/>
+
                 @if(!auth()->user()==null)
-                    @if(Auth::user()->id === $product->author->id|| auth()-> user()->is_admin)
+                    @if(Auth::user()->id === $post->author->id|| auth()-> user()->is_admin)
 
                         <button>
-                            <a class="btn btn-primary" href="{{route('user.product.edit', $product->id)}}">Edit</a>
+                            <a class="btn btn-primary" href="{{route('user.post.edit', $post->id)}}">Edit</a>
                         </button>
                     @endif
                 @endif
@@ -51,7 +62,7 @@
             @endforeach
 
         @else
-            <p class="text-center">No products yet on current page</p>
+            <p class="text-center">No posts yet on current page</p>
         @endif
             <nav class="p-pagination" aria-label="Pagination">
                 <ol class="p-pagination__items">

@@ -1,6 +1,6 @@
 @auth
 
-        <form method="POST" action="/products/{{ $product->slug }}/comments">
+        <form method="POST" action="/posts/{{ $post->slug }}/comments">
             @csrf
             <div class="mt-6">
                 <textarea

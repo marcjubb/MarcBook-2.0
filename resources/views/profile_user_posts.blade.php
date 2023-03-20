@@ -4,8 +4,8 @@
     <h1>Your Posts & Comments</h1>
     <p class="pt-4">
         Categories:
-        @foreach ($products as $product)
-            @foreach($product -> categories as $category)
+        @foreach ($posts as $post)
+            @foreach($post -> categories as $category)
                 <a href="/category/{{$category -> slug}}">
                     {{$category -> title}}
                 </a>
@@ -14,28 +14,28 @@
     </p>
     <h1>Posts</h1>
     <main class="max-w-6xl mx-auto mt-6 lg:mt-20 space-y-6">
-        @if ($products -> count())
+        @if ($posts -> count())
 
-            @foreach ($products as $product)
+            @foreach ($posts as $post)
 
-                <x-product-card
-                    :product="$product"
+                <x-post-card
+                    :post="$post"
                     class="{{'col-span-3' }}"/>
 
                 <button>
-                <a class="btn btn-primary" href="{{route('user.product.edit', $product->id)}}">Edit</a>
+                <a class="btn btn-primary" href="{{route('user.post.edit', $post->id)}}">Edit</a>
                 </button>
 
             @endforeach
         @else
-            <p class="text-center">No products yet</p>
+            <p class="text-center">No posts yet</p>
         @endif
 
         <h1>Comments</h1>
         @if ($comments -> count())
 
             @foreach ($comments as $comment)
-                <h3>Commented on {{$comment -> product -> title}}</h3>
+                <h3>Commented on {{$comment -> post -> title}}</h3>
                 <x-comment-card
                     :comment="$comment"/>
 

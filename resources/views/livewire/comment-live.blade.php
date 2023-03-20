@@ -5,9 +5,11 @@
             <div class="flex">
                 <div>
                     <textarea wire:model.defer="body" name="body" id="body" rows="3" placeholder="Comment"></textarea>
+
                     @error('comment')
                     <p>{{ $message }}</p>
                     @enderror
+
                     <button type="submit">
                         <svg wire:loading wire:target="store">
 
@@ -18,8 +20,9 @@
                 </div>
             </div>
         </form>
-        @foreach ($product->comments as $comment)
-            <x-product-comment :comment="$comment"/>
+
+        @foreach ($post->comments as $comment)
+            <x-post-comment :comment="$comment"/>
             @if(!auth()->user()==null)
                 @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
                     <button>
@@ -30,13 +33,14 @@
         @endforeach
 
     </div>
+
 @else
     <p class="font-semibold">
         <a href="/register" class="hover:underline">Register</a> or
         <a href="/login" class="hover:underline">log in</a> to leave a comment.
     </p>
-    @foreach ($product->comments as $comment)
-        <x-product-comment :comment="$comment"/>
+    @foreach ($post->comments as $comment)
+        <x-post-comment :comment="$comment"/>
         @if(!auth()->user()==null)
             @if($comment->author == auth()->user()|| auth()-> user()->is_admin)
                 <button>

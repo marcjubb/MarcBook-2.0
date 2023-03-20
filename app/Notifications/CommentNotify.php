@@ -25,6 +25,7 @@ class CommentNotify extends Notification
 
         $this -> comment = $comment;
     }
+
     /**
      * Get the notification's delivery channels.
      *

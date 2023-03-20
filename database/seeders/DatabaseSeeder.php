@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 use App\Models\Category;
-use App\Models\Product;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -24,12 +24,13 @@ class DatabaseSeeder extends Seeder
 
 
 
-        $this -> call(ProductsTableSeeder::class);
+        $this -> call(PostsTableSeeder::class);
 
 
 
+        $this -> call(CommentsTableSeeder::class);
 
-        foreach (Product::all() as $post) {
+        foreach (Post::all() as $post) {
             $categories = Category::all()->take(random_int(1,Category::query()->count()))->pluck('id');
             $post -> categories() -> attach($categories);
         }

@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Http;
+
 use http\Client\Request;
 
 class GNews
 {
     private  $apikey;
     private $url;
+
 
     public function __construct($apiKey)
     {
@@ -22,6 +25,18 @@ class GNews
         curl_close($ch);
         return $data['articles'];
 
-           }
+        //for ($i = 0; $i < count($articles); $i++) {
+            // articles[i].title
+            //echo "Title: " . $articles[$i]['title'] . "\n";
+            // articles[i].description
+           // echo "Description: " . $articles[$i]['description'] . "\n";
+            // You can replace {property} below with any of the article properties returned by the API.
+            // articles[i].{property}
+            // echo $articles[$i]['{property}'] . "\n";
+
+            // Delete this line to display all the articles returned by the request. Currently only the first article is displayed.
+          //  break;
+        //}
+    }
 
 }

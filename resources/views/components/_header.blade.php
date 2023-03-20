@@ -10,7 +10,7 @@
     </form>
 
     @if(!auth()->user()==null)
-    <form method="GET" action="/user/product/create">
+    <form method="GET" action="/user/post/create">
         <button>Create Post</button>
     </form>
         @endif
