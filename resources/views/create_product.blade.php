@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<h1 class="text-center">Create Post</h1>
+<h1 class="text-center">Create Product</h1>
 <hr>
 <div class=" mt-2 ">
-    <form action="{{route('user.product.publish_post')}}" method="POST" enctype="multipart/form-data">
+    <form action="{{route('user.product.publish_product')}}" method="POST" enctype="multipart/form-data">
         @csrf
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -17,21 +17,27 @@
             </div>
         @endif
         <div class="form-group m-3 p-3">
-            <label for="title">Post Title</label>
+            <label for="title">Product Title</label>
             <label>
                 <input class="form-control" type="text" name="title" value="">
             </label>
         </div>
 
         <div class="form-group m-3 p-3">
-            <label for="body">Post body</label>
+            <label for="body">Product Description</label>
             <label>
                 <textarea class="form-control" name="body" cols="40" rows="5"></textarea>
             </label>
         </div>
+        <div class="form-group m-3 p-3">
+            <label for="price">Product Price</label>
+            <label>
+                <input class="form-control" type="text" name="price" value="">
+            </label>
+        </div>
 
         <div class="form-group m-3 p-3">
-            <label for="body">Post Slug</label>
+            <label for="body">Product Slug</label>
             <label>
                 <textarea class="form-control" name="slug" cols="40" rows="5"></textarea>
             </label>
@@ -53,7 +59,7 @@
             </select>
         </div>
 
-        <button  type="submit" value="submit">Publish Post</button>
+        <button  type="submit" value="submit">Publish Product</button>
     </form>
 
 </div>

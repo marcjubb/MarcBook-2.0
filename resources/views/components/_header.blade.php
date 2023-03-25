@@ -1,5 +1,5 @@
 
-<h1>MarcBook</h1>
+<h1>eMarc</h1>
 <label>
     <form method="GET" action="/">
         <input type="text"
@@ -8,12 +8,6 @@
                value="{{ request('search') }}"
         >
     </form>
-
-    @if(!auth()->user()==null)
-    <form method="GET" action="/user/product/create">
-        <button>Create Post</button>
-    </form>
-        @endif
 
 
 </label>

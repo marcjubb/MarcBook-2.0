@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Facebook;
 use App\Http\GNews;
 use App\Http\Twitter;
+use App\Models\Affinity;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class PostController extends Controller
+class ProductController extends Controller
 {
 
 
@@ -32,19 +33,33 @@ class PostController extends Controller
      */
     public function create()
     {
+
+        $affinities = Affinity::all();
+
+        $interactions = $affinities->map(function ($affinity) {
+            return [
+                'User ID' => $affinity->user_id,
+                'Item ID' => $affinity->product_id,
+                'Time' => $affinity->created_at->timestamp,
+                'Event Type' => 'purchase',
+                'Event Weight' => $affinity->score,
+            ];
+        });
+
+
+
         $categories = Category::all();
         return view('create_product',compact('categories'));
     }
 
     public function store()
     {
-        $image = request()->file('image');
+        $image = request()->file(
+            'image');
         if($image !== null) {
             $image->move(public_path('images'), $image->getClientOriginalName());
 
-            $product = Product::create(array_merge($this->validatePost(), [
-                'user_id' => request()->user()->id,
-            ]));
+            $product = Product::create($this->validateProduct());
             Image::create([
                 'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
                 'imageable_id' => $product->id,
@@ -53,10 +68,8 @@ class PostController extends Controller
 
         }
 
-        Product::create(array_merge($this->validatePost(), [
-            'user_id' => request()->user()->id,
-        ]));
-        return redirect()->route('home')->with('success', 'Post Published!');
+
+        return redirect()->route('home')->with('success', 'Product Published!');
 
     }
     public function show(Product $product)
@@ -122,8 +135,8 @@ class PostController extends Controller
             }else{
                 Image::create([
                     'image_path' => "images/" . request()->file('image')->getClientOriginalName(),
-                    'imageable_id' => $post->id,
-                    'imageable_type' => 'App\Models\Product'
+                    'imageable_id' => $product -> id,
+                    'imageable_type' => Product::class
                 ]);
             }
 
@@ -131,27 +144,27 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Project Updated Successfully!');
 
     }
-    public function edit_post($post_id)
+    public function edit_product($product_id)
     {
-        $post = Product::query()->where('id', '=', $post_id)->first();
-        if(Auth::user()->id === $post->author->id|| Auth::user()->is_admin){
+        $product = Product::query()->where('id', '=', $product_id)->first();
+        if(Auth::user()->is_admin){
             $categories = Category::all();
-            return view('edit_post', compact('post','categories'));
+            return view('edit_product', compact('product','categories'));
         }
         return redirect('/');
 
     }
 
-    protected function validatePost(?Product $post = null): array
+    protected function validateProduct(?Product $product = null): array
     {
-        $post ??= new Product();
+        $product ??= new Product();
 
         return request()->validate([
             'title' => ['required', 'max:255'],
-            'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post)],
             'body' => 'required',
+            'price' => 'required|numeric',
+            'slug' => 'required|unique:products,slug',
             'category_id' => ['required', Rule::exists('categories', 'id')],
-            'image' => 'mimes:jpeg,jpg,png,gif'
         ]);
 
     }

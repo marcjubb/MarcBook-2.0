@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -39,11 +40,14 @@ class User extends Authenticatable
     ];
 
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('score');
     }
-
+    public function affinities(): HasMany
+    {
+        return $this->hasMany(Affinity::class);
+    }
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');

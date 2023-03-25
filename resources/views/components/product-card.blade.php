@@ -1,5 +1,5 @@
 @props(['product'])
-
+@if ($product)
 <article>
     <header>
         <h4>
@@ -14,4 +14,5 @@
     <div class="text-sm mt-4 space-y-4">
         {!! $product -> body!!}
     </div>
+    @endif
 </article>

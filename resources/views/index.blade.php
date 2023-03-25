@@ -1,28 +1,6 @@
 <x-guest-layout>
    @include ('components._header')
-    <main>
-        @if(!auth()->user()==null)
-        <h1>Notifications: </h1>
-        @if (auth()->user()->notifications -> count())
-            @foreach (auth()->user()->notifications as $notification)
-                   <h3>You have recieved a comment: {{ $notification->data['body']}}</h3>
-                <h4>This was commented on product:</h4>
-                    @php
-                $id = $notification->data['comment_id'];
-                $product = \App\Models\Comment::query()->where('id','=',$id )->first()->product;
-                @endphp
-                    <a href="/products/{{$product -> slug }}">
-                        <h3 class="font-bold">
-                            {{$product->title}}</h3>
-                    </a>
-            @endforeach
-                <button>
-                    <a class="btn btn-primary" href="{{route('clear.notifications')}}">Clear Notifications</a>
-                </button>
-
-            @endif
-
-        @endif
+    <main class="container mx-auto px-4">
         <h1>Category Selection:</h1>
         @if ($categories -> count())
             @foreach ($categories as $category)
@@ -35,21 +13,25 @@
         @endif
         <h1>All products :</h1>
         @if ($products -> count())
-            @foreach ($products as $product)
-                <x-product-card
-                    :product="$product"
-                    class="col-span-3"/>
-                @if(!auth()->user()==null)
-                    @if(Auth::user()->id === $product->author->id|| auth()-> user()->is_admin)
-
-                        <button>
-                            <a class="btn btn-primary" href="{{route('user.product.edit', $product->id)}}">Edit</a>
-                        </button>
-                    @endif
-                @endif
-
-            @endforeach
-
+            <div class="grid grid-cols-3 gap-4">
+                @foreach ($products as $product)
+                    <div class="bg-white rounded-lg shadow-lg flex">
+                        @if(!$product->image == null)
+                            <img src="{{ asset($product->image->image_path)}}" alt="" class="rounded-l-lg object-cover h-48 w-48">
+                        @endif
+                        <div class="p-4 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold mb-2">{{ $product->title }}</h3>
+                                <p class="text-gray-700 text-base">{{ $product->description }}</p>
+                                <p class="text-gray-900 text-lg font-bold mt-4">${{ $product->price }}</p>
+                            </div>
+                            <div>
+                                <a href="{{ route('product.show', $product->slug) }}" class="block bg-gray-900 text-white text-center py-2 px-4 rounded-lg mt-4 hover:bg-gray-800 focus:bg-gray-800 focus:outline-none">View Product</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         @else
             <p class="text-center">No products yet on current page</p>
         @endif

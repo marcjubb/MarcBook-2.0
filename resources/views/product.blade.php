@@ -5,37 +5,46 @@
     @include ('components._header')
     <article>
 
-
         <header>
-
             @if(!$product->image == null)
-            <img src="{{ asset($product->image->image_path)}}" alt="" class="rounded-xl">
+                <img src="{{ asset($product->image->image_path)}}" alt="" class="rounded-xl">
             @endif
 
-
             <div class="mt-4">
-                <a href="/products/{{$product -> slug}}">
-                    {{$product -> title}}
-                </a>
+                <h1 class="text-3xl font-bold">{{$product->title}}</h1>
             </div>
         </header>
 
         <div class="text-sm mt-4 space-y-4">
-            {!! $product -> body!!}
+            {!! $product->body !!}
         </div>
+        <h4>£{!! $product->price !!}</h4>
 
-        <div class="ml-3">
-            <a href="/author/{{$product -> author -> username}}">
-                <h5 class="font-bold">{{$product -> author -> name}}</h5>
-            </a>
+        <div class="flex items-center mt-8 space-x-4">
+            <form action="{{ route('basket.add', $product->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                    Add to Basket
+                </button>
+            </form>
+
+            <form action="{{ route('buy', $product->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                    Buy It Now
+                </button>
+            </form>
+
+            <form action="{{ route('watchlist.add', $product->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
+                    Add to Watchlist
+                </button>
+            </form>
         </div>
-
-
 
 
     </article>
-
-
 
 </x-layout>
     </x-guest-layout>

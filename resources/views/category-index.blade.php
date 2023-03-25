@@ -8,7 +8,7 @@
                     :product="$product"
                     class="{{ $loop -> iteration < 3 ? 'col-span-3' : 'col-span-2'}}"/>
             @if(!auth()->user()==null)
-                @if($product->author == auth()->user()|| auth()-> user()->is_admin)
+                @if(auth()-> user()->is_admin)
                     <button>
                         <a class="btn btn-primary" href="{{route('user.product.edit', $product->id)}}">Edit</a>
                     </button>

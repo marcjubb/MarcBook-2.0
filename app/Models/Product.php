@@ -15,9 +15,9 @@ class Product extends Model
 
     use HasFactory;
 
-    protected $with = ['author','categories'];
-    protected $fillable = ['user_id','body','title','category_id','slug','image'];
-
+    protected $with = ['categories'];
+    protected $fillable = ['body','title','category_id','price','slug','image'];
+    protected $table = 'products';
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, fn($query, $search) =>
@@ -34,9 +34,9 @@ class Product extends Model
     }
 
 
-    public function author(): BelongsTo
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsToMany(User::class)->withPivot('score');
     }
     public function categories(): BelongsToMany
     {

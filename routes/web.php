@@ -1,6 +1,6 @@
 <?php
 use App\Http\Controllers\PostCommentsController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\GNews;
@@ -31,26 +31,25 @@ app()-> singleton('App\Http\Facebook', function ($app){
 app()-> singleton('App\Http\GNews', function ($app){
     return new GNews("57c5c660c0d558f175431aed521c4b42");
 });
-Route::get('/api', [PostController::class, 'gnewsTest']);
+Route::get('/api', [ProductController::class, 'gnewsTest']);
 
 
 
 //Webpage Browsing routes
-Route::get('/', [PostController::class, 'index']) ->name('home');
-Route::get('/home', [PostController::class, 'index']) ->name('homer');
-Route::get('/posts/{post:slug}', [PostController::class, 'show']);
-Route::post('/posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
+Route::get('/', [ProductController::class, 'index']) ->name('home');
+Route::get('/home', [ProductController::class, 'index']) ->name('homer');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+Route::post('/products/{product:slug}/comments', [PostCommentsController::class, 'store']);
 Route::get('/author/{author:username}', function (User $author){
     return view('products', [
         'author'=> $author,
-        'products'=> $author -> products(),
     ]);
 
 });
 Route::get('/category/{category:slug}', function (Category $category){
     return view('category-index', [
         'category'=> $category,
-        'posts'=> $category -> posts]);
+        'products'=> $category -> products()]);
 
 });
 
@@ -65,19 +64,24 @@ Route::get('/sendnotification',[PostCommentsController::class, 'send_notificatio
 
 
 
-Route::get('/user/post/create',[PostController::class, 'create'])->name('user.post.create')->middleware('auth');
-Route::post('/user/post/submit',[PostController::class, 'store'])->name('user.post.publish_post')->middleware('auth');
-Route::post('/user/uploadpp',[PostController::class, 'uploadPP'])->name('user.uploadpp')->middleware('auth');
+Route::get('/user/product/create',[ProductController::class, 'create'])->name('user.product.create');
+Route::post('/user/product/submit',[ProductController::class, 'store'])->name('user.product.publish_product');
+Route::post('/user/uploadpp',[ProductController::class, 'uploadPP'])->name('user.uploadpp');
 
-Route::get('/user/post/edit/{post:id}',[PostController::class, 'edit_post'])->middleware('auth')
-    ->name('user.post.edit');
-Route::post('/user/post/update/{post:id}',[PostController::class, 'update_post'])->middleware('auth')
-    ->name('user.post.update_post');
+Route::get('/user/product/edit/{product:id}',[ProductController::class, 'edit_product'])->middleware('auth')
+    ->name('user.product.edit');
+Route::post('/user/product/update/{product:id}',[ProductController::class, 'update_product'])->middleware('auth')
+    ->name('user.product.update_product');
 
 Route::get('/user/comment/edit/{comment:id}',[PostCommentsController::class, 'edit_comment'])->middleware('auth')
     ->name('user.comment.edit');
 Route::post('/user/comment/update/{comment:id}',[PostCommentsController::class, 'update_comment'])->middleware('auth')
     ->name('user.comment.update_comment');
+
+
+Route::get('/basket/add', [ProductController::class, 'index']) ->name('basket.add');
+Route::get('/buy', [ProductController::class, 'index']) ->name('buy');
+Route::get('/watchlist/add', [ProductController::class, 'index']) ->name('watchlist.add');
 
 
 Route::middleware('auth')->group(function () {
@@ -88,7 +92,7 @@ Route::middleware('auth')->group(function () {
             'products'=> $author -> products(),
             'comments' => $author -> comments
         ]);
-    })->name('user_posts_comments');
+    })->name('user_product_comments');
 
 
 });
