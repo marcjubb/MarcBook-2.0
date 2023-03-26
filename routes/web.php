@@ -62,7 +62,21 @@ Route::get('/sendnotification',[PostCommentsController::class, 'send_notificatio
     ->name('send.notification');
 
 
+Route::get('/basket/add', function () {
+    $productId = request('product_id');
+    // Add product with ID $productId to basket
+});
 
+Route::get('/basket/add', function () {
+    $productId = request('product_id');
+    $basket = Session::get('basket', []);
+    if (!isset($basket[$productId])) {
+        $basket[$productId] = 0;
+    }
+    $basket[$productId]++;
+    Session::put('basket', $basket);
+    return redirect('/basket');
+});
 
 Route::get('/user/product/create',[ProductController::class, 'create'])->name('user.product.create');
 Route::post('/user/product/submit',[ProductController::class, 'store'])->name('user.product.publish_product');
