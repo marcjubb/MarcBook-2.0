@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
 
         $this -> call(ProductsTableSeeder::class);
-
+        $this -> call(BasketItemSeeder::class);
 
         $this -> call(AffinitiesTableSeeder::class);
 

@@ -1,8 +1,11 @@
 <?php
+
+use App\Http\Controllers\BasketController;
 use App\Http\Controllers\PostCommentsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\WishlistController;
 use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Category;
@@ -22,7 +25,8 @@ use App\Http\Controllers;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//t@t2.com
+//test123123
 app()-> singleton('App\Http\Facebook', function ($app){
     return new Facebook("key");
 });
@@ -33,6 +37,8 @@ app()-> singleton('App\Http\GNews', function ($app){
 });
 Route::get('/api', [ProductController::class, 'gnewsTest']);
 
+
+Route::get('/r', [ProductController::class, 'getRecommendations']) ->name('home');
 
 
 //Webpage Browsing routes
@@ -47,11 +53,13 @@ Route::get('/author/{author:username}', function (User $author){
 
 });
 Route::get('/category/{category:slug}', function (Category $category){
+
     return view('category-index', [
         'category'=> $category,
-        'products'=> $category -> products()]);
+        'products'=> $category -> products()->get(),
+        'categories'=> Category::all()]);
 
-});
+})->name("category");
 
 
 Route::get('/clearnotifications',[PostCommentsController::class, 'clear_notifications'])
@@ -62,21 +70,6 @@ Route::get('/sendnotification',[PostCommentsController::class, 'send_notificatio
     ->name('send.notification');
 
 
-Route::get('/basket/add', function () {
-    $productId = request('product_id');
-    // Add product with ID $productId to basket
-});
-
-Route::get('/basket/add', function () {
-    $productId = request('product_id');
-    $basket = Session::get('basket', []);
-    if (!isset($basket[$productId])) {
-        $basket[$productId] = 0;
-    }
-    $basket[$productId]++;
-    Session::put('basket', $basket);
-    return redirect('/basket');
-});
 
 Route::get('/user/product/create',[ProductController::class, 'create'])->name('user.product.create');
 Route::post('/user/product/submit',[ProductController::class, 'store'])->name('user.product.publish_product');
@@ -93,10 +86,23 @@ Route::post('/user/comment/update/{comment:id}',[PostCommentsController::class, 
     ->name('user.comment.update_comment');
 
 
-Route::get('/basket/add', [ProductController::class, 'index']) ->name('basket.add');
-Route::get('/buy', [ProductController::class, 'index']) ->name('buy');
-Route::get('/watchlist/add', [ProductController::class, 'index']) ->name('watchlist.add');
 
+Route::post('/user/product/update/{product:id}',[ProductController::class, 'update_product'])->middleware('auth')
+    ->name('user.product.update_product');
+
+
+Route::get('/bought/{product}', [ProductController::class, 'bought']) ->name('bought');
+
+
+Route::get('/basket', [ProductController::class, 'basket']) ->name('basket.view');
+Route::get('/basket/add/{id}', [BasketController::class, 'add'])->name('basket.add');
+
+
+Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+Route::get('/wishlist', [WishlistController::class, 'wishlist']) ->name('wishlist.view');
+
+
+Route::get('/basket/addeee', [Controllers\BasketController::class, 'add']) ->name('buy');
 
 Route::middleware('auth')->group(function () {
 

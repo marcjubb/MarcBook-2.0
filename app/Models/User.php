@@ -39,7 +39,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    public function basketItems(): HasMany
+    {
+        return $this->hasMany(BasketItem::class);
+    }
+    public function wishlistItems(): HasMany
+    {
+        return $this->hasMany(WishlistItem::class);
+    }
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class)->withPivot('score');

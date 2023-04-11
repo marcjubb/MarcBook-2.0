@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,9 +20,10 @@ class AffinityFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'=> fake()-> numberBetween(1,User::query()->count()),
-            'product_id'=> fake()-> numberBetween(1,Category::query()->count()),
+            'user_id'=> fake()-> numberBetween(User::query()->first()->id,User::query()->count()),
+            'product_id'=> fake()-> numberBetween(Product::query()->first()->id,Product::query()->count()),
             'score'=> fake()-> numberBetween(1,5),
+            'time'=> fake() -> unique()->numberBetween(1,50000)
         ];
     }
 }

@@ -19,9 +19,9 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'category_id'=> fake()-> numberBetween(1,Category::query()->count()),
-            'slug' => fake()->slug,
-            'title' => fake()->word(),
+            'category_id'=> fake()-> numberBetween(Category::query()->first()->id,Category::query()->count()),
+            'slug' => fake()->unique()->slug,
+            'title' => fake()->unique()->word(),
             'body' => fake()->sentence,
             'price' => $this->faker->randomFloat('2',0,2),
         ];

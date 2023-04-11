@@ -18,6 +18,6 @@ class AffinitiesTableSeeder extends Seeder
     public function run()
     {
 
-        Affinity::factory()->count(25)->create();
+        Affinity::factory()->count(200)->create();
     }
 }

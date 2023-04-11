@@ -9,8 +9,8 @@ use App\Models\Affinity;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\Recommendation;
 use Auth;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -81,13 +81,102 @@ class ProductController extends Controller
     }
     public function index()
     {
+        $query = Product::query();
+
+        $categorySlug = request('category');
+        if ($categorySlug && $categorySlug !== 'all') {
+            $category = Category::where('slug', $categorySlug)->firstOrFail();
+            $query->where('category_id', $category->id);
+        }
+
+        $sort = request('sort');
+        if ($sort === 'asc') {
+            $query->orderBy('price');
+        } elseif ($sort === 'desc') {
+            $query->orderByDesc('price');
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->filter(request(['search', 'author']))->paginate(10)->withQueryString();
+
         return view('index', [
-            'categories'=> Category::all(),
-            'products' => Product::query()->latest()->filter(
-                request(['search', 'author'])
-            )->paginate(10)->withQueryString()
+            'categories' => Category::all(),
+            'products' => $products,
         ]);
     }
+
+
+    public function bought(Product $product)
+    {
+        $user = auth()->user();
+        $affinity = $user->affinities()->where('product_id', $product -> id)->first();
+
+        if ($affinity) {
+            $affinity -> score = 5;
+        } else {
+            $affinity = new Affinity([
+                'product_id' =>  $product -> id,
+                'user_id' => $user->id,
+                'score' => 5,
+                'time' => time()
+            ]);
+        }
+        $affinity ->save();
+
+        return redirect('bought.add')->with('success', 'Product added to basket');
+    }
+
+    public function getRecommendations()
+    {
+
+
+        $file = fopen('T:\\PyCharm\\SAReccomend\\recommenders\\examples\\00_quick_start\\recommendations.csv', 'rb');
+        $user_id = 7;
+        $header = fgetcsv($file); // Read the header row
+        $recommendations = [];
+        while (($row = fgetcsv($file)) !== false) {
+            if ($row[0] == $user_id) {
+                // If the row corresponds to the logged-in user, add the recommendation to the array
+                $recommendations[] = [
+                    'item_id' => $row[1],
+                    'score' => $row[2],
+                ];
+            }
+        }
+
+// Store the recommendations in the database
+        /*foreach ($recommendations as $rec) {
+            $recommendation = new Recommendation([
+                'user_id' => $rec[0],
+                'item_id' => $rec[1],
+                'score' => $rec[2]
+            ]);
+            $recommendation->save();
+        }*/
+
+
+        fclose($file);
+
+        $product = Product::query()->where('id', '=', $recommendations[0]['item_id'])->first();
+
+        return view('product',['product'=> $product]);
+    }
+
+    public function basket()
+    {
+        if (Auth::user()===null){
+            redirect('home');
+        }else{
+            $user = Auth::user();
+            $user->load('basketItems.product');
+            return view('basket', ['user' => $user]);
+        }
+
+    }
+
+
+
     public function uploadPP(Request $request){
 
         $id = Auth::user()->id;

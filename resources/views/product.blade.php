@@ -19,23 +19,24 @@
             {!! $product->body !!}
         </div>
         <h4>£{!! $product->price !!}</h4>
-
         <div class="flex items-center mt-8 space-x-4">
-            <form action="{{ route('basket.add', $product->id) }}" method="POST">
+
+            <form action="{{ route('basket.add', $product->id) }}" method="GET">
                 @csrf
                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
                     Add to Basket
                 </button>
             </form>
 
-            <form action="{{ route('buy', $product->id) }}" method="POST">
+
+            <form action="{{ route('bought', $product->id) }}" method="GET">
                 @csrf
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                     Buy It Now
                 </button>
             </form>
 
-            <form action="{{ route('watchlist.add', $product->id) }}" method="POST">
+            <form action="{{ route('wishlist.add', $product->id) }}" method="GET">
                 @csrf
                 <button type="submit" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
                     Add to Watchlist

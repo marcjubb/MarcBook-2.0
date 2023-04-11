@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Affinity extends Model
 {
-    public static $model;
+    protected $fillable = ['product_id','user_id','score','time'];
     use HasFactory;
     /*public static function getModel()
     {

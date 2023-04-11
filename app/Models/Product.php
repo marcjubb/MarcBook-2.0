@@ -32,8 +32,14 @@ class Product extends Model
         )
         );
     }
-
-
+    public function WishlistItem(): BelongsToMany
+    {
+        return $this->BelongsToMany(WishlistItem::class);
+    }
+    public function basketItems(): BelongsToMany
+    {
+        return $this->BelongsToMany(BasketItem::class);
+    }
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('score');
