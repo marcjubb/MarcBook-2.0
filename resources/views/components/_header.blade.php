@@ -1,13 +1,29 @@
 <header class="header">
     <div class="header-container">
         <a href="/" class="title">eMarc</a>
-        <form method="GET" action="/" class="search-bar">
-            <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}">
+        <form method="GET" action="{{ route('home') }}">
+            <label>
+                <input type="text" name="search" placeholder="Search Products" value="{{ request('search') }}">
+            </label>
+            <input type="hidden" name="category" value="{{ request('category') }}">
+            <input type="hidden" name="sort" value="{{ request('sort') }}">
         </form>
+
         <div class="header-buttons">
-            <a href="#" class="button"><i class="fa fa-shopping-basket"></i> Basket</a>
-            <a href="#" class="button"><i class="fa fa-heart"></i> Wishlist</a>
-            <a href="#" class="button"><i class="fa fa-user"></i> Profile</a>
+
+
+            @if(Auth::user() === null)
+                <a href="/login" class="button"><i class="fa fa-user"></i>Login</a>
+            @else
+                @if(Auth::user()->is_admin)
+                <a href="/orders" class="button"><i class="fa fa-user"></i>Orders</a>
+                <a href="/admin" class="button"><i class="fa fa-user"></i>Admin Panel</a>
+                @endif
+
+                <a href="/basket" class="button"><i class="fa fa-shopping-basket"></i> Basket</a>
+                <a href="/wishlist" class="button"><i class="fa fa-heart"></i> Wishlist</a>
+                <a href="/profile" class="button"><i class="fa fa-user"></i>Profile</a>
+            @endif
         </div>
     </div>
 </header>

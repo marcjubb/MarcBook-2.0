@@ -4,32 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
+        <link href="{{ asset('css/custom-pagination.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/recommended-products.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/products-page.css') }}" rel="stylesheet">
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="stylesheet" href="https://assets.ubuntu.com/v1/vanilla-framework-version-3.9.0.min.css" />
         <!-- Fonts -->
         <style>
-            .category-selection {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1rem;
-            }
-
-            .category-select {
-                font-size: 1.2rem;
-                padding: 0.5rem;
-            }
-
-            .product-grid {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .product {
-                width: calc(100% / 3);
-                margin-bottom: 2rem;
-            }
 
             .product a {
                 display: block;
@@ -62,10 +43,7 @@
                 text-decoration: none;
             }
 
-            .search-bar {
-                width: 50%;
-                margin: 0 20px;
-            }
+
 
             .search-bar input {
                 height: 40px;

@@ -18,20 +18,40 @@ class Product extends Model
     protected $with = ['categories'];
     protected $fillable = ['body','title','category_id','price','slug','image'];
     protected $table = 'products';
+
+
+
     public function scopeFilter($query, array $filters)
     {
-        $query->when($filters['search'] ?? false, fn($query, $search) =>
-        $query->where(fn($query) =>
-        $query->where('title', 'like', '%' . $search . '%')
-            ->orWhere('body', 'like', '%' . $search . '%')
-        )
-        );
-        $query->when($filters['author'] ?? false, fn($query, $author) =>
-        $query->whereHas('author'[], fn ($query) =>
-        $query->where('username', $author)
-        )
-        );
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('body', 'like', '%' . $search . '%');
+            });
+        });
+
+        // Category filter
+        $query->when($filters['category'] ?? false, function ($query, $categorySlug) {
+            if ($categorySlug !== 'all') {
+                $category = Category::where('slug', $categorySlug)->firstOrFail();
+                $query->where('category_id', $category->id);
+            }
+        });
+        // Sorting filter
+        $query->when($filters['sort'] ?? false, function ($query, $sort) {
+            if ($sort === 'asc') {
+                $query->orderBy('price');
+            } elseif ($sort === 'desc') {
+                $query->orderByDesc('price');
+            } else {
+                $query->latest();
+            }
+        });
     }
+
+
+
+
     public function WishlistItem(): BelongsToMany
     {
         return $this->BelongsToMany(WishlistItem::class);

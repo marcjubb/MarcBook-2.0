@@ -1,5 +1,6 @@
+<x-guest-layout>
 @extends('layouts.app')
-
+@include ('components._header')
 @component('layouts.app')
 
     @slot('header')
@@ -21,12 +22,22 @@
                 </thead>
                 <tbody>
                 @foreach ($user->basketItems as $item)
+                    @if ($item->order_status ==="basket")
                     <tr>
                         <td>{{ $item->product->title }}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>{{ $item->product->price }}</td>
                         <td>{{ $item->quantity * $item->product->price }}</td>
+                        <td>
+                                <form method="POST" action="{{ route('basket.buy', ['order' => $item->id]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="button"><i class="fa fa-user"></i>Buy</button>
+                                </form>
+                        </td>
+
                     </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>
@@ -52,3 +63,4 @@
     @endif
     @endslot
 @endcomponent
+    </x-guest-layout>

@@ -1,5 +1,7 @@
-@extends('layouts.app')
+<x-guest-layout>
 
+@extends('layouts.app')
+@include ('components._header')
 @component('layouts.app')
 
     @slot('header')
@@ -22,12 +24,22 @@
                     <tr>
                         <td>{{ $item->product->title }}</td>
                         <td>{{ $item->product->price }}</td>
+
                         <td>
-                           {{-- <form action="{{ route('wishlist.remove', $item->id) }}" method="POST">
+                                <form method="POST" action="{{ route('basket.add', ['id' => $item->product->id]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="button"><i class="fa fa-user"></i>Add to Basket</button>
+                                </form>
+                        </td>
+
+
+                        <td>
+                            <form action="{{ route('wishlist.remove', $item->product->id) }}" method="POST">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Remove</button>
-                            </form>--}}
+                                @method('PUT')
+                                <button type="submit" class="btn btn-danger">Remove From Wishlist</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -48,3 +60,4 @@
     @endif
     @endslot
 @endcomponent
+    </x-guest-layout>

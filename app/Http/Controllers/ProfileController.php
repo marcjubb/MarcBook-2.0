@@ -22,6 +22,15 @@ class ProfileController extends Controller
         ]);
     }
 
+
+    public function index(){
+        return view('profile', [
+            'orders' => Auth::user()->basketItems
+            ]);
+
+    }
+
+
     /**
      * Update the user's profile information.
      *

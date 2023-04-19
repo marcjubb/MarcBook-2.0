@@ -6,6 +6,7 @@ use App\Http\Facebook;
 use App\Http\GNews;
 use App\Http\Twitter;
 use App\Models\Affinity;
+use App\Models\BasketItem;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
@@ -72,6 +73,55 @@ class ProductController extends Controller
         return redirect()->route('home')->with('success', 'Product Published!');
 
     }
+
+    public function adminPanel()
+    {
+
+        if(Auth::user()->is_admin){
+
+            $products = Product::all();
+            return view('admin_panel', compact('products'));
+
+        }
+        return redirect('/');
+    }
+
+    public function orders()
+    {
+        if(Auth::user()->is_admin){
+            $orders = BasketItem::query() ->where('order_status', '<>', 'basket')
+                ->where('order_status', '<>', 'complete')
+                ->get();
+            return view('orders', ['orders' => $orders]);
+        }
+        return redirect('/');
+    }
+
+    public function ship(BasketItem $order)
+    {
+        if(Auth::user()->is_admin){
+
+
+                $order->order_status ='Shipped';
+                $order->save();
+                return redirect()->back()->with('status', 'Order shipped successfully!');
+
+        }
+        return redirect('/');
+    }
+    public function complete(BasketItem $order)
+    {
+        if(Auth::user()->is_admin){
+
+            $order->order_status ='Complete';
+            $order->save();
+            return redirect()->back()->with('status', 'Order completed successfully!');
+
+        }
+        return redirect('/');
+    }
+
+
     public function show(Product $product)
     {
 
@@ -79,32 +129,87 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+
+
     public function index()
+    {
+        $last_export_time = session('last_export_time', 0);
+        $current_time = time();
+        $elapsed_time = $current_time - $last_export_time;
+
+        // Check if the elapsed time is greater than 1 hour (3600 seconds)
+        if ($elapsed_time > 60) {
+            // Export the CSV file
+            (new AffinitiesController())->generateRecommended();
+            // Store the current time as the last export time in session data
+            session(['last_export_time' => $current_time]);
+        }
+
+        $products = $this->getFilteredProducts();
+
+        if (Auth::user()){
+            $recommended_products = $this->getRecommendedProducts();
+
+            return view('index', [
+                'categories' => Category::all(),
+                'products' => $products,
+                'recommended_products' => $recommended_products,
+            ]);
+        }
+        return view('index', [
+            'categories' => Category::all(),
+            'products' => $products
+        ]);
+
+
+    }
+
+    private function getFilteredProducts()
     {
         $query = Product::query();
 
-        $categorySlug = request('category');
-        if ($categorySlug && $categorySlug !== 'all') {
-            $category = Category::where('slug', $categorySlug)->firstOrFail();
-            $query->where('category_id', $category->id);
-        }
+        return $query->filter(request(['search', 'category', 'sort']))->paginate(12)->withQueryString();
 
-        $sort = request('sort');
-        if ($sort === 'asc') {
-            $query->orderBy('price');
-        } elseif ($sort === 'desc') {
-            $query->orderByDesc('price');
-        } else {
-            $query->latest();
-        }
-
-        $products = $query->filter(request(['search', 'author']))->paginate(10)->withQueryString();
-
-        return view('index', [
-            'categories' => Category::all(),
-            'products' => $products,
-        ]);
     }
+
+    private function getRecommendedProducts()
+    {
+        $file = fopen('T:/PHPProjects/eMarc/storage/app/exports/recommendations.csv', 'rb');
+        $user_id = Auth::user()->id;
+        $header = fgetcsv($file); // Read the header row
+        $recommendations = [];
+        while (($row = fgetcsv($file)) !== false) {
+            if ($row[0] == $user_id) {
+                // If the row corresponds to the logged-in user, add the recommendation to the array
+                $recommendations[] = [
+                    'item_id' => $row[1],
+                    'score' => $row[2],
+                ];
+            }
+        }
+        fclose($file);
+
+        // Get the recommended products
+        $recommended_products = [];
+        foreach ($recommendations as $recommendation) {
+            $product = Product::find($recommendation['item_id']);
+            if ($product) {
+                $recommended_products[] = [
+                    'product' => $product,
+                    'score' => $recommendation['score'],
+                ];
+            }
+        }
+        // Sort recommended products by score
+        usort($recommended_products, function ($a, $b) {
+            return $b['score'] <=> $a['score'];
+        });
+        // Take the top 5 recommended products
+        $recommended_products = array_slice($recommended_products, 0, 5);
+
+        return $recommended_products;
+    }
+
 
 
     public function bought(Product $product)
@@ -131,8 +236,9 @@ class ProductController extends Controller
     {
 
 
-        $file = fopen('T:\\PyCharm\\SAReccomend\\recommenders\\examples\\00_quick_start\\recommendations.csv', 'rb');
-        $user_id = 7;
+        $file = fopen('T:/PHPProjects/eMarc/storage/app/exports/recommendations.csv', 'rb');
+
+        $user_id = Auth::user()->id;
         $header = fgetcsv($file); // Read the header row
         $recommendations = [];
         while (($row = fgetcsv($file)) !== false) {
@@ -144,17 +250,6 @@ class ProductController extends Controller
                 ];
             }
         }
-
-// Store the recommendations in the database
-        /*foreach ($recommendations as $rec) {
-            $recommendation = new Recommendation([
-                'user_id' => $rec[0],
-                'item_id' => $rec[1],
-                'score' => $rec[2]
-            ]);
-            $recommendation->save();
-        }*/
-
 
         fclose($file);
 
@@ -200,15 +295,17 @@ class ProductController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
+            'price' => 'required|numeric',
             'category_id' => 'required'
         ]);
 
         $product = Product::query()->where('id', '=', $id)->first();
-        if ($request->user()->cannot('update', $product)) {
-            abort(403);
-        }
+       // if ($request->user()->cannot('update', $product)) {
+            //abort(403);
+       // }
         $product->title = $request->title;
         $product->body = $request->body;
+        $product->price = $request->price;
         $product->category_id = $request->category_id;
         $product->save();
 

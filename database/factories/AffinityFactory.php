@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Affinity;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory
  */
+
+
 class AffinityFactory extends Factory
 {
     /**
@@ -20,10 +23,33 @@ class AffinityFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'=> fake()-> numberBetween(User::query()->first()->id,User::query()->count()),
-            'product_id'=> fake()-> numberBetween(Product::query()->first()->id,Product::query()->count()),
-            'score'=> fake()-> numberBetween(1,5),
-            'time'=> fake() -> unique()->numberBetween(1,50000)
+            'user_id' => $this->faker->numberBetween(1, User::count()),
+            'product_id' => $this->faker->numberBetween(1, Product::count()),
+            'score' => $this->faker->numberBetween(1, 5),
+            'time' => $this->faker->unique()->numberBetween(1, 50000),
         ];
+    }
+
+    /**
+     * Indicate that the combination of user_id and product_id should be unique.
+     *
+     * @return Factory
+     */
+    public function configure(): Factory
+    {
+        return $this->afterCreating(function ($affinity) {
+            $unique = false;
+            while (!$unique) {
+                $unique = !Affinity::where([
+                    'user_id' => $affinity->user_id,
+                    'product_id' => $affinity->product_id,
+                ])->exists();
+
+                if (!$unique) {
+                    $affinity->product_id = $this->faker->numberBetween(1, Product::count());
+                    $affinity->user_id = $this->faker->numberBetween(1, User::count());
+                }
+            }
+        });
     }
 }

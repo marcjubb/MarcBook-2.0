@@ -7,6 +7,7 @@ use App\Models\BasketItem;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Type\Integer;
 
 
@@ -53,6 +54,23 @@ class BasketController extends Controller
 
         // Redirect back to the product page with a success message
         return redirect('basket')->with('success', 'Product added to basket');
+    }
+
+    public function buy(BasketItem $order)
+    {
+            $order->order_status ='Processing';
+            $order->save();
+            return redirect('basket')->with('status', 'Order completed successfully!');
+
+    }
+
+    public function remove($id){
+        $user = auth()->user();
+        $product = Product::query()->where('id', '=', $id)->first();
+        $basketItem = $user->basketItems()->where('product_id', $product -> id)->first();
+        $basketItem->delete();
+        return redirect('basket')->with('status', 'Product removed from basket');
+
     }
 }
 

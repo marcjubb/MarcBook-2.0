@@ -21,6 +21,9 @@
         <h4>£{!! $product->price !!}</h4>
         <div class="flex items-center mt-8 space-x-4">
 
+
+            @if (auth()->user())
+
             <form action="{{ route('basket.add', $product->id) }}" method="GET">
                 @csrf
                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
@@ -36,13 +39,20 @@
                 </button>
             </form>
 
-            <form action="{{ route('wishlist.add', $product->id) }}" method="GET">
+            <form action="{{ route('wishlist.add', $product->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <button type="submit" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
-                    Add to Watchlist
+                    Add to Wishlist
                 </button>
             </form>
         </div>
+
+        @else
+            <a href="{{ route('login') }}" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                Login for more options
+            </a>
+        @endif
 
 
     </article>
