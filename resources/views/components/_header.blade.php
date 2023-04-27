@@ -23,6 +23,12 @@
                 <a href="/basket" class="button"><i class="fa fa-shopping-basket"></i> Basket</a>
                 <a href="/wishlist" class="button"><i class="fa fa-heart"></i> Wishlist</a>
                 <a href="/profile" class="button"><i class="fa fa-user"></i>Profile</a>
+
+
+                    <form method="POST" action="{{ route('logout') }}" class="fa fa-user">
+                        @csrf
+                        <button type="submit" class="button"><i class="fa fa-user"></i>Logout</button>
+                    </form>
             @endif
         </div>
     </div>

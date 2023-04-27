@@ -11,4 +11,8 @@ class Recommendation
     public function __construct(array $array)
     {
     }
+
+    public static function count()
+    {
+    }
 }
